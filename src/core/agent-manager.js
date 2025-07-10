@@ -6,6 +6,7 @@ import { ParserAgent } from '../agents/parser-agent.js';
 import { AnalyzerAgent } from '../agents/analyzer-agent.js';
 import { ValidatorAgent } from '../agents/validator-agent.js';
 import { ReporterAgent } from '../agents/reporter-agent.js';
+import { logger } from './logger.js';
 
 /**
  * Agent manager for spawning, monitoring, and coordinating agents
@@ -52,7 +53,7 @@ export class AgentManager {
     }
 
     this.agentTypes.set(type, AgentClass);
-    console.log(`[AgentManager] Registered agent type: ${type}`);
+    logger.log(`[AgentManager] Registered agent type: ${type}`);
   }
 
   /**
@@ -101,7 +102,7 @@ export class AgentManager {
       sessionId
     }, 'AgentManager');
 
-    console.log(`[AgentManager] Spawned agent: ${agentId} (${type})`);
+    logger.log(`[AgentManager] Spawned agent: ${agentId} (${type})`);
     return agentId;
   }
 
@@ -209,9 +210,9 @@ export class AgentManager {
         sessionId: agent.sessionId
       }, 'AgentManager');
 
-      console.log(`[AgentManager] Terminated agent: ${agentId} (${reason})`);
+      logger.log(`[AgentManager] Terminated agent: ${agentId} (${reason})`);
     } catch (error) {
-      console.error(`[AgentManager] Error terminating agent ${agentId}:`, error.message);
+      logger.error(`[AgentManager] Error terminating agent ${agentId}:`, error.message);
       throw error;
     }
   }
@@ -392,7 +393,7 @@ export class AgentManager {
         }
       };
     } catch (error) {
-      console.error('[AgentManager] Vulnerability scan workflow failed:', error.message);
+      logger.error('[AgentManager] Vulnerability scan workflow failed:', error.message);
       throw error;
     }
   }
@@ -438,7 +439,7 @@ export class AgentManager {
         }
       };
     } catch (error) {
-      console.error('[AgentManager] Dependency analysis workflow failed:', error.message);
+      logger.error('[AgentManager] Dependency analysis workflow failed:', error.message);
       throw error;
     }
   }
@@ -457,7 +458,7 @@ export class AgentManager {
    * @param {object} event - Event data
    */
   handleAgentCreated(event) {
-    console.log(`[AgentManager] Agent created: ${event.message.agentId}`);
+    logger.log(`[AgentManager] Agent created: ${event.message.agentId}`);
   }
 
   /**
@@ -465,7 +466,7 @@ export class AgentManager {
    * @param {object} event - Event data
    */
   handleAgentCompleted(event) {
-    console.log(`[AgentManager] Agent completed: ${event.message.agentId}`);
+    logger.log(`[AgentManager] Agent completed: ${event.message.agentId}`);
   }
 
   /**
@@ -473,7 +474,7 @@ export class AgentManager {
    * @param {object} event - Event data
    */
   handleAgentFailed(event) {
-    console.error(`[AgentManager] Agent failed: ${event.message.agentId} - ${event.message.error}`);
+    logger.error(`[AgentManager] Agent failed: ${event.message.agentId} - ${event.message.error}`);
   }
 
   /**
@@ -481,7 +482,7 @@ export class AgentManager {
    * @param {object} event - Event data
    */
   handleAgentTerminated(event) {
-    console.log(`[AgentManager] Agent terminated: ${event.message.agentId} - ${event.message.reason}`);
+    logger.log(`[AgentManager] Agent terminated: ${event.message.agentId} - ${event.message.reason}`);
   }
 
   /**

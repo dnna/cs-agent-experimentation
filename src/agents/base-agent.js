@@ -1,4 +1,5 @@
 import { messageBus } from '../core/message-bus.js';
+import { logger } from '../core/logger.js';
 
 /**
  * Base class for all agents
@@ -82,7 +83,7 @@ export class BaseAgent {
       ...data
     };
 
-    console.log(`[${logEntry.timestamp}] [${this.id}] ${level.toUpperCase()}: ${message}`, data);
+    logger.log(`[${logEntry.timestamp}] [${this.id}] ${level.toUpperCase()}: ${message}`, data);
     
     // Publish log event
     messageBus.publish('agent.log', logEntry, this.id);

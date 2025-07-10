@@ -1,4 +1,5 @@
 import EventEmitter from 'eventemitter3';
+import { logger } from './logger.js';
 
 /**
  * Message bus for inter-agent communication
@@ -32,7 +33,7 @@ export class MessageBus extends EventEmitter {
     // Emit to wildcard subscribers
     this.emit('*', envelope);
     
-    console.log(`[MessageBus] Published ${topic} from ${sender}`);
+    logger.debug(`[MessageBus] Published ${topic} from ${sender}`);
   }
 
   /**
@@ -50,7 +51,7 @@ export class MessageBus extends EventEmitter {
     }
     this.subscriberCount.set(topic, this.subscriberCount.get(topic) + 1);
     
-    console.log(`[MessageBus] ${subscriber} subscribed to ${topic}`);
+    logger.debug(`[MessageBus] ${subscriber} subscribed to ${topic}`);
   }
 
   /**
@@ -72,7 +73,7 @@ export class MessageBus extends EventEmitter {
       }
     }
     
-    console.log(`[MessageBus] ${subscriber} unsubscribed from ${topic}`);
+    logger.debug(`[MessageBus] ${subscriber} unsubscribed from ${topic}`);
   }
 
   /**

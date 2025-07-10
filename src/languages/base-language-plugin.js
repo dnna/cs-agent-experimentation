@@ -63,14 +63,6 @@ export class BaseLanguagePlugin {
   }
 
   /**
-   * Get AI prompts for semantic analysis
-   * @returns {object} AI prompts by vulnerability type
-   */
-  getAIPrompts() {
-    return {};
-  }
-
-  /**
    * Get CWE mappings for vulnerability types
    * @returns {object} CWE mappings
    */
@@ -141,7 +133,7 @@ export class BaseLanguagePlugin {
       vulnerabilityDetection: typeof this.detectVulnerabilities === 'function',
       dependencyAnalysis: typeof this.analyzeDependencies === 'function',
       patternMatching: Object.keys(this.getVulnerabilityPatterns()).length > 0,
-      aiAnalysis: Object.keys(this.getAIPrompts()).length > 0,
+      aiAnalysis: false,
       preprocessing: this.preprocessFile !== BaseLanguagePlugin.prototype.preprocessFile,
       postprocessing: this.postprocessResults !== BaseLanguagePlugin.prototype.postprocessResults
     };

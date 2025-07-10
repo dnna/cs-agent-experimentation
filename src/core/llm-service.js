@@ -3,6 +3,7 @@ import { ChatAnthropic } from '@langchain/anthropic';
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 import { HumanMessage, SystemMessage } from '@langchain/core/messages';
 import { z } from 'zod';
+import { logger } from './logger.js';
 
 /**
  * Vulnerability schema for structured output
@@ -102,9 +103,9 @@ export class LLMService {
     try {
       this.llm = await this.createLLMInstance();
       this.initialized = true;
-      console.log(`[LLMService] Initialized with provider: ${this.config.provider}, model: ${this.config.model}`);
+      logger.log(`[LLMService] Initialized with provider: ${this.config.provider}, model: ${this.config.model}`);
     } catch (error) {
-      console.error('[LLMService] Failed to initialize:', error.message);
+      logger.error('[LLMService] Failed to initialize:', error.message);
       throw error;
     }
   }
@@ -184,7 +185,7 @@ export class LLMService {
 
       return response.content;
     } catch (error) {
-      console.error('[LLMService] Chat failed:', error.message);
+      logger.error('[LLMService] Chat failed:', error.message);
       throw error;
     }
   }
@@ -261,7 +262,7 @@ Return a JSON array where each element is an array of vulnerabilities for the co
           temperature: 0.1
         });
 
-        console.log(`[LLMService] Batch analysis completed for ${batch.length} segments`);
+        logger.log(`[LLMService] Batch analysis completed for ${batch.length} segments`);
         
         // Add metadata to each vulnerability in each result
         const batchResults = response.results.map((segmentVulns, batchIndex) => {
@@ -282,11 +283,11 @@ Return a JSON array where each element is an array of vulnerabilities for the co
         results.push(...batchResults);
         
       } catch (error) {
-        console.error(`[LLMService] Batch vulnerability analysis failed:`, error.message);
+        logger.error(`[LLMService] Batch vulnerability analysis failed:`, error.message);
         
         // Check if it's a JSON parsing error and retry with fallback approach
         if (error.message.includes('JSON') || error.message.includes('Unterminated string')) {
-          console.log(`[LLMService] Retrying batch with individual analysis due to JSON error`);
+          logger.log(`[LLMService] Retrying batch with individual analysis due to JSON error`);
           
           try {
             // Fallback: analyze each segment individually
@@ -296,13 +297,13 @@ Return a JSON array where each element is an array of vulnerabilities for the co
                 const individualResult = await this.analyzeVulnerabilities(segment.code, segment.context);
                 fallbackResults.push(individualResult);
               } catch (segmentError) {
-                console.error(`[LLMService] Individual segment analysis failed:`, segmentError.message);
+                logger.error(`[LLMService] Individual segment analysis failed:`, segmentError.message);
                 fallbackResults.push([]);
               }
             }
             results.push(...fallbackResults);
           } catch (fallbackError) {
-            console.error(`[LLMService] Fallback analysis also failed:`, fallbackError.message);
+            logger.error(`[LLMService] Fallback analysis also failed:`, fallbackError.message);
             // Add empty arrays for failed batch
             results.push(...batch.map(() => []));
           }
@@ -378,7 +379,7 @@ Analyze the code carefully and identify any security vulnerabilities.`;
         temperature: 0.1 // Lower temperature for more consistent analysis
       });
 
-      console.log('[LLMService] Structured LLM response:', response);
+      logger.log('[LLMService] Structured LLM response:', response);
 
       // Extract vulnerabilities from response object
       const vulnerabilities = response.vulnerabilities || [];
@@ -397,7 +398,7 @@ Analyze the code carefully and identify any security vulnerabilities.`;
       }));
 
     } catch (error) {
-      console.error('[LLMService] Vulnerability analysis failed:', error.message);
+      logger.error('[LLMService] Vulnerability analysis failed:', error.message);
       return [];
     }
   }
@@ -454,7 +455,7 @@ Analyze whether this is a legitimate vulnerability or a false positive and provi
         temperature: 0.1
       });
 
-      console.log('[LLMService] Structured validation response:', validation);
+      logger.log('[LLMService] Structured validation response:', validation);
 
       return {
         ...validation,
@@ -464,7 +465,7 @@ Analyze whether this is a legitimate vulnerability or a false positive and provi
       };
 
     } catch (error) {
-      console.error('[LLMService] Vulnerability validation failed:', error.message);
+      logger.error('[LLMService] Vulnerability validation failed:', error.message);
       
       // Return default validation if LLM fails
       return {
@@ -527,11 +528,11 @@ Provide comprehensive remediation advice organized by priority and timeline.`;
         new HumanMessage(userPrompt)
       ]);
       
-      console.log('[LLMService] Structured remediation response:', remediation);
+      logger.log('[LLMService] Structured remediation response:', remediation);
       
       return remediation;
     } catch (error) {
-      console.error('[LLMService] Remediation generation failed:', error.message);
+      logger.error('[LLMService] Remediation generation failed:', error.message);
       return {
         immediate: [],
         shortTerm: [],
@@ -548,7 +549,7 @@ Provide comprehensive remediation advice organized by priority and timeline.`;
    * @deprecated Use structured output instead
    */
   cleanJsonResponse(response) {
-    console.warn('[LLMService] cleanJsonResponse is deprecated - use structured output instead');
+    logger.warn('[LLMService] cleanJsonResponse is deprecated - use structured output instead');
     
     // Remove markdown code blocks
     let cleaned = response.replace(/```json\s*|\s*```/g, '');

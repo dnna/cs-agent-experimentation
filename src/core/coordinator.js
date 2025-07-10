@@ -3,6 +3,7 @@ import { pluginLoader } from './plugin-loader.js';
 import { languageDetector } from '../tools/language-detector.js';
 import { stateStore } from './state-store.js';
 import { messageBus } from './message-bus.js';
+import { logger } from './logger.js';
 
 /**
  * Main coordinator for orchestrating vulnerability scanning
@@ -23,7 +24,7 @@ export class VulnerabilityCoordinator {
   async initialize() {
     if (this.initialized) return;
 
-    console.log('🚀 Initializing AI-Powered Agentic Vulnerability Scanner...');
+    logger.always('🚀 Initializing AI-Powered Agentic Vulnerability Scanner...');
 
     try {
       // Initialize core components
@@ -32,14 +33,14 @@ export class VulnerabilityCoordinator {
       await this.agentManager.initialize();
 
       this.initialized = true;
-      console.log('✅ Scanner initialized successfully');
+      logger.always('✅ Scanner initialized successfully');
       
       // Log loaded plugins
       const pluginInfo = this.pluginLoader.getPluginInfo();
-      console.log(`📦 Loaded ${pluginInfo.count} language plugins: ${pluginInfo.plugins.map(p => p.name).join(', ')}`);
+      logger.log(`📦 Loaded ${pluginInfo.count} language plugins: ${pluginInfo.plugins.map(p => p.name).join(', ')}`);
       
     } catch (error) {
-      console.error('❌ Failed to initialize scanner:', error.message);
+      logger.error('❌ Failed to initialize scanner:', error.message);
       throw error;
     }
   }
@@ -56,7 +57,7 @@ export class VulnerabilityCoordinator {
     }
 
     const startTime = Date.now();
-    console.log(`🔍 Starting scan of repository: ${repositoryPath}`);
+    logger.always(`🔍 Starting scan of repository: ${repositoryPath}`);
 
     try {
       // Create scan session
@@ -65,7 +66,7 @@ export class VulnerabilityCoordinator {
       // Step 1: Detect languages or use forced language
       let languageDetection;
       if (options.language) {
-        console.log(`🔍 Using forced language: ${options.language}`);
+        logger.log(`🔍 Using forced language: ${options.language}`);
         languageDetection = {
           primary: options.language,
           secondary: [],
@@ -73,7 +74,7 @@ export class VulnerabilityCoordinator {
           details: {}
         };
       } else {
-        console.log('🔍 Detecting programming languages...');
+        logger.log('🔍 Detecting programming languages...');
         languageDetection = await this.languageDetector.detectLanguages(repositoryPath);
         
         if (!languageDetection.primary) {
@@ -81,9 +82,9 @@ export class VulnerabilityCoordinator {
         }
       }
 
-      console.log(`📝 Primary language: ${languageDetection.primary}`);
+      logger.always(`📝 Primary language: ${languageDetection.primary}`);
       if (languageDetection.secondary.length > 0) {
-        console.log(`📝 Secondary languages: ${languageDetection.secondary.join(', ')}`);
+        logger.log(`📝 Secondary languages: ${languageDetection.secondary.join(', ')}`);
       }
 
       // Step 2: Load appropriate plugins
@@ -101,7 +102,7 @@ export class VulnerabilityCoordinator {
       };
 
       for (const plugin of activePlugins) {
-        console.log(`🔍 Scanning with ${plugin.name} plugin...`);
+        logger.log(`🔍 Scanning with ${plugin.name} plugin...`);
         
         try {
           const pluginResults = await this.scanWithPlugin(repositoryPath, plugin, options, sessionId);
@@ -110,10 +111,10 @@ export class VulnerabilityCoordinator {
           allResults.vulnerabilities.push(...pluginResults.vulnerabilities);
           allResults.metrics[plugin.name] = pluginResults.metrics;
           
-          console.log(`✅ ${plugin.name} scan completed: ${pluginResults.vulnerabilities.length} vulnerabilities found`);
+          logger.log(`✅ ${plugin.name} scan completed: ${pluginResults.vulnerabilities.length} vulnerabilities found`);
           
         } catch (error) {
-          console.error(`❌ ${plugin.name} scan failed:`, error.message);
+          logger.error(`❌ ${plugin.name} scan failed:`, error.message);
           allResults.metrics[plugin.name] = {
             error: error.message,
             vulnerabilitiesFound: 0
@@ -127,13 +128,13 @@ export class VulnerabilityCoordinator {
       
       await this.stateStore.updateSession(sessionId, 'completed', allResults);
 
-      console.log(`✅ Scan completed in ${this.formatDuration(duration)}`);
-      console.log(`📊 Total vulnerabilities found: ${allResults.vulnerabilities.length}`);
+      logger.always(`✅ Scan completed in ${this.formatDuration(duration)}`);
+      logger.always(`📊 Total vulnerabilities found: ${allResults.vulnerabilities.length}`);
 
       return allResults;
 
     } catch (error) {
-      console.error('❌ Scan failed:', error.message);
+      logger.error('❌ Scan failed:', error.message);
       throw error;
     }
   }
@@ -149,7 +150,7 @@ export class VulnerabilityCoordinator {
       await this.initialize();
     }
 
-    console.log(`🔍 Analyzing dependencies in: ${repositoryPath}`);
+    logger.log(`🔍 Analyzing dependencies in: ${repositoryPath}`);
 
     try {
       // Create analysis session
@@ -175,7 +176,7 @@ export class VulnerabilityCoordinator {
         throw new Error(`No plugin available for language: ${targetLanguage}`);
       }
 
-      console.log(`📝 Using ${plugin.name} plugin for dependency analysis`);
+      logger.log(`📝 Using ${plugin.name} plugin for dependency analysis`);
 
       // Run dependency analysis workflow
       const results = await this.agentManager.orchestrateWorkflow(
@@ -187,13 +188,13 @@ export class VulnerabilityCoordinator {
       // Update session with results
       await this.stateStore.updateSession(sessionId, 'completed', results);
 
-      console.log(`✅ Dependency analysis completed`);
-      console.log(`📊 Dependency vulnerabilities found: ${results.vulnerabilities.length}`);
+      logger.always(`✅ Dependency analysis completed`);
+      logger.always(`📊 Dependency vulnerabilities found: ${results.vulnerabilities.length}`);
 
       return results;
 
     } catch (error) {
-      console.error('❌ Dependency analysis failed:', error.message);
+      logger.error('❌ Dependency analysis failed:', error.message);
       throw error;
     }
   }
@@ -209,7 +210,7 @@ export class VulnerabilityCoordinator {
       await this.initialize();
     }
 
-    console.log(`📊 Running OWASP Benchmark evaluation: ${benchmarkPath}`);
+    logger.log(`📊 Running OWASP Benchmark evaluation: ${benchmarkPath}`);
 
     try {
       // Import benchmark evaluator
@@ -228,10 +229,10 @@ export class VulnerabilityCoordinator {
       // Evaluate results against expected outcomes
       const benchmarkResults = await evaluator.evaluateResults(scanResults.vulnerabilities);
 
-      console.log(`✅ Benchmark evaluation completed`);
-      console.log(`📊 Precision: ${(benchmarkResults.precision * 100).toFixed(1)}%`);
-      console.log(`📊 Recall: ${(benchmarkResults.recall * 100).toFixed(1)}%`);
-      console.log(`📊 F1-Score: ${(benchmarkResults.f1Score * 100).toFixed(1)}%`);
+      logger.always(`✅ Benchmark evaluation completed`);
+      logger.always(`📊 Precision: ${(benchmarkResults.precision * 100).toFixed(1)}%`);
+      logger.always(`📊 Recall: ${(benchmarkResults.recall * 100).toFixed(1)}%`);
+      logger.always(`📊 F1-Score: ${(benchmarkResults.f1Score * 100).toFixed(1)}%`);
 
       return {
         ...benchmarkResults,
@@ -241,7 +242,7 @@ export class VulnerabilityCoordinator {
       };
 
     } catch (error) {
-      console.error('❌ Benchmark evaluation failed:', error.message);
+      logger.error('❌ Benchmark evaluation failed:', error.message);
       throw error;
     }
   }
@@ -315,7 +316,7 @@ export class VulnerabilityCoordinator {
       return results;
 
     } catch (error) {
-      console.error(`Plugin scan failed for ${plugin.name}:`, error.message);
+      logger.error(`Plugin scan failed for ${plugin.name}:`, error.message);
       throw error;
     }
   }
@@ -383,15 +384,15 @@ export class VulnerabilityCoordinator {
    * Cleanup coordinator resources
    */
   async cleanup() {
-    console.log('🧹 Cleaning up coordinator resources...');
+    logger.log('🧹 Cleaning up coordinator resources...');
     
     try {
       await this.agentManager.cleanup();
       await this.stateStore.close();
       
-      console.log('✅ Cleanup completed');
+      logger.log('✅ Cleanup completed');
     } catch (error) {
-      console.error('❌ Cleanup failed:', error.message);
+      logger.error('❌ Cleanup failed:', error.message);
     }
   }
 
@@ -400,7 +401,7 @@ export class VulnerabilityCoordinator {
    */
   setupGracefulShutdown() {
     const shutdown = async (signal) => {
-      console.log(`\n🛑 Received ${signal}, shutting down gracefully...`);
+      logger.always(`\n🛑 Received ${signal}, shutting down gracefully...`);
       await this.cleanup();
       process.exit(0);
     };
@@ -408,7 +409,7 @@ export class VulnerabilityCoordinator {
     process.on('SIGINT', shutdown);
     process.on('SIGTERM', shutdown);
     process.on('uncaughtException', async (error) => {
-      console.error('❌ Uncaught exception:', error);
+      logger.error('❌ Uncaught exception:', error);
       await this.cleanup();
       process.exit(1);
     });

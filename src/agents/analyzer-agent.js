@@ -66,12 +66,12 @@ export class AnalyzerAgent extends BaseAgent {
       throw new Error('parsedFiles must be an array');
     }
 
-    this.log('info', `Starting vulnerability analysis on ${parsedFiles.length} files`);
+    console.log(`Starting vulnerability analysis on ${parsedFiles.length} files`);
     
     // Filter to successfully parsed files
     const validFiles = parsedFiles.filter(file => file.parseSuccess && file.parsed);
     
-    this.log('info', `Analyzing ${validFiles.length} valid files`);
+    console.log(`Analyzing ${validFiles.length} valid files`);
     
     // Analyze files for vulnerabilities
     const vulnerabilities = await this.analyzeFiles(validFiles);
@@ -124,7 +124,7 @@ export class AnalyzerAgent extends BaseAgent {
     
     const analyzeFile = async (file, index) => {
       try {
-        this.log('info', `Analyzing file ${index + 1}/${files.length}: ${file.relativePath}`);
+        console.log(`Analyzing file ${index + 1}/${files.length}: ${file.relativePath}`);
         
         // Create analysis context
         const context = {
@@ -148,7 +148,7 @@ export class AnalyzerAgent extends BaseAgent {
           context: { ...context, ...vuln.context }
         }));
         
-        this.log('info', `Found ${vulnerabilities.length} vulnerabilities in ${file.relativePath}`);
+        console.log(`Found ${vulnerabilities.length} vulnerabilities in ${file.relativePath}`);
         
         return contextualizedVulnerabilities;
       } catch (error) {
@@ -167,7 +167,7 @@ export class AnalyzerAgent extends BaseAgent {
       allVulnerabilities.push(...fileVulnerabilities);
     }
     
-    this.log('info', `Found ${allVulnerabilities.length} total vulnerabilities`);
+    console.log(`Found ${allVulnerabilities.length} total vulnerabilities`);
     
     return allVulnerabilities;
   }

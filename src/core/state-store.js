@@ -1,6 +1,7 @@
 import sqlite3 from 'sqlite3';
 import { promises as fs } from 'fs';
 import path from 'path';
+import { logger } from './logger.js';
 
 /**
  * State store for managing scan state and results
@@ -335,7 +336,7 @@ export class StateStore {
     
     return new Promise((resolve) => {
       this.db.close((err) => {
-        if (err) console.error('Error closing database:', err);
+        if (err) logger.error('Error closing database:', err);
         resolve();
       });
     });

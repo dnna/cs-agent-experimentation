@@ -1,6 +1,7 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { logger } from './logger.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -48,10 +49,10 @@ export class PluginLoader {
         this.buildFilePatterns.set(buildFile, plugin.name);
       }
       
-      console.log(`[PluginLoader] Loaded plugin: ${plugin.name} v${plugin.version}`);
+      logger.log(`[PluginLoader] Loaded plugin: ${plugin.name} v${plugin.version}`);
       return plugin;
     } catch (error) {
-      console.error(`[PluginLoader] Failed to load plugin ${pluginPath}:`, error.message);
+      logger.error(`[PluginLoader] Failed to load plugin ${pluginPath}:`, error.message);
       throw new Error(`Failed to load plugin ${pluginPath}: ${error.message}`);
     }
   }
@@ -75,7 +76,7 @@ export class PluginLoader {
           await fs.access(pluginPath);
           return this.loadPlugin(pluginPath);
         } catch (error) {
-          console.warn(`[PluginLoader] Plugin file not found: ${pluginPath}`);
+          logger.warn(`[PluginLoader] Plugin file not found: ${pluginPath}`);
           return null;
         }
       });
@@ -90,14 +91,14 @@ export class PluginLoader {
           loadedCount++;
         } else if (result.status === 'rejected') {
           failedCount++;
-          console.error(`[PluginLoader] Failed to load plugin for ${languageDirs[index]}:`, result.reason);
+          logger.error(`[PluginLoader] Failed to load plugin for ${languageDirs[index]}:`, result.reason);
         }
       });
 
-      console.log(`[PluginLoader] Loaded ${loadedCount} plugins, ${failedCount} failed`);
+      logger.log(`[PluginLoader] Loaded ${loadedCount} plugins, ${failedCount} failed`);
       this.loaded = true;
     } catch (error) {
-      console.error(`[PluginLoader] Failed to load plugins from ${languagesDir}:`, error.message);
+      logger.error(`[PluginLoader] Failed to load plugins from ${languagesDir}:`, error.message);
       throw error;
     }
   }
