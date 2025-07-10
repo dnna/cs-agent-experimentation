@@ -3,14 +3,18 @@ import { LanguageDetector } from '../../src/tools/language-detector.js';
 import { promises as fs } from 'fs';
 import path from 'path';
 import { jest } from '@jest/globals';
+import glob from 'fast-glob';
+
+console.log(glob);
+
+jest.mock('fast-glob', () => jest.fn());
 
 describe('LanguageDetector', () => {
   let detector;
-  let mockFs;
   
   beforeEach(() => {
     detector = new LanguageDetector();
-    mockFs = jest.mocked(fs);
+    glob.mockClear();
   });
 
   describe('getSupportedLanguages', () => {
@@ -55,29 +59,33 @@ describe('LanguageDetector', () => {
 
     it('should throw error for invalid rules', () => {
       expect(() => {
-        detector.addLanguageRules('testlang', { files: 'invalid' });
-      }).toThrow('Missing required field: extensions');
+        detector.addLanguageRules('testlang', { extensions: [], directories: [], keywords: [], weight: {} });
+      }).toThrow('Missing required field: files');
     });
   });
 
   describe('detectLanguages', () => {
-    it('should detect java project', async () => {
-      // Mock file system calls
+    beforeEach(() => {
       jest.spyOn(fs, 'access').mockResolvedValue(undefined);
-      jest.spyOn(fs, 'stat').mockResolvedValue({
-        isDirectory: () => true,
-        size: 1024
+      jest.spyOn(fs, 'readFile').mockResolvedValue('public class Test {}');
+    });
+
+    it('should detect java project', async () => {
+      const statIsDir = { isDirectory: () => true, size: 1024 };
+      const statIsFile = { isDirectory: () => false, size: 1024 };
+      
+      jest.spyOn(fs, 'stat').mockImplementation(async (filePath) => {
+        if (filePath.toString().includes('src/main/java')) {
+          return statIsDir;
+        }
+        return statIsFile;
       });
 
-      // Mock glob results
-      const mockGlob = jest.fn()
-        .mockResolvedValueOnce(['pom.xml']) // files check
-        .mockResolvedValueOnce(['src/main/java/Test.java']) // extensions check
-        .mockResolvedValueOnce(['src/Test.java']); // keyword check
-
-      jest.doMock('fast-glob', () => ({ default: mockGlob }));
-
-      jest.spyOn(fs, 'readFile').mockResolvedValue('public class Test {}');
+      glob.mockImplementation(async (pattern) => {
+        if (pattern.toString().includes('pom.xml')) return ['pom.xml'];
+        if (pattern.toString().includes('.java')) return ['src/main/java/Test.java'];
+        return [];
+      });
 
       const result = await detector.detectLanguages('/fake/java/project');
       
