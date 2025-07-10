@@ -108,6 +108,10 @@ dist
 
 # JetBrains IDEs
 .idea/
+
+# Project specific
 CLAUDE.md
 GEMINI.md
 SPEC.md
+PROGRESS_*.md
+README.md
