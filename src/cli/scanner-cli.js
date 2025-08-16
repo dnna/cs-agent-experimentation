@@ -32,10 +32,9 @@ class ScannerCLI {
       .option('-l, --language <language>', 'Force specific language (auto-detect if not specified)')
       .option('-o, --output <format>', 'Output format (json, html, markdown)', 'json')
       .option('-f, --file <path>', 'Output file path')
-      .option('--max-files <number>', 'Maximum number of files to analyze', parseInt, 10000)
-      .option('--max-size <size>', 'Maximum file size in bytes', parseInt, 5242880)
+      .option('--max-files <number>', 'Maximum number of files to analyze', (value) => parseInt(value, 10), 10000)
+      .option('--max-size <size>', 'Maximum file size in bytes', (value) => parseInt(value, 10), 5242880)
       .option('--confidence <threshold>', 'Minimum confidence threshold', parseFloat, 0.5)
-      .option('--ai', 'Enable AI-powered analysis')
       .option('--verbose', 'Enable verbose logging')
       .option('--include-tests', 'Include test files in analysis')
       .action(async (repository, options) => {
@@ -126,7 +125,6 @@ class ScannerCLI {
         maxFiles: options.maxFiles,
         maxSize: options.maxSize,
         confidenceThreshold: options.confidence,
-        enableAI: options.ai,
         includeTests: options.includeTests
       };
       

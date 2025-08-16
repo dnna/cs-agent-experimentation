@@ -334,13 +334,16 @@ export class AgentManager {
    * @returns {object} Scan result
    */
   async orchestrateVulnerabilityScan(input, sessionId) {
-    const { repositoryPath, languagePlugin } = input;
+    const { repositoryPath, languagePlugin, maxFiles, maxSize, confidenceThreshold, includeTests, excludePatterns } = input;
     
     try {
       // Step 1: Spawn Explorer Agent
       const explorerId = await this.spawnAgent('explorer', {
         repositoryPath,
-        plugin: languagePlugin
+        plugin: languagePlugin,
+        maxFiles: maxFiles,
+        maxFileSize: maxSize,
+        excludePatterns: excludePatterns
       }, sessionId);
 
       // Step 2: Discover files
@@ -358,7 +361,8 @@ export class AgentManager {
 
       // Step 5: Spawn Analyzer Agent
       const analyzerId = await this.spawnAgent('analyzer', {
-        plugin: languagePlugin
+        plugin: languagePlugin,
+        confidenceThreshold: confidenceThreshold
       }, sessionId);
 
       // Step 6: Analyze for vulnerabilities

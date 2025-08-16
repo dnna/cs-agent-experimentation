@@ -60,7 +60,7 @@ export class OwaspBenchmarkEvaluator {
         if (values.length >= 4) {
           const testcase = values[0].trim();
           const category = values[1].trim();
-          const realVulnerability = values[2].trim() === 'TRUE';
+          const realVulnerability = values[2].trim().toLowerCase() === 'true';
           const cwe = parseInt(values[3].trim()) || 0;
           
           results.push({
@@ -149,10 +149,18 @@ export class OwaspBenchmarkEvaluator {
       details: []
     };
 
+    // Track which scan results have been matched to avoid double counting
+    const matchedVulnerabilityIds = new Set();
+
     // Process each expected result
     for (const expected of this.expectedResults) {
       const prediction = this.findPrediction(scanResults, expected);
       const predicted = prediction !== null;
+
+      // Mark this vulnerability as matched if found
+      if (prediction && prediction.id) {
+        matchedVulnerabilityIds.add(prediction.id);
+      }
 
       // Calculate confusion matrix
       if (expected.isVulnerable && predicted) {
@@ -180,6 +188,21 @@ export class OwaspBenchmarkEvaluator {
         confidence: prediction?.confidence || 0
       });
     }
+
+    // Count unmatched scan results as false positives
+    let unmatchedCount = 0;
+    for (const result of scanResults) {
+      if (!matchedVulnerabilityIds.has(result.id)) {
+        unmatchedCount++;
+        metrics.falsePositives++;
+        
+        // Try to categorize this false positive
+        const category = this.mapVulnerabilityTypeToCategory(result.type) || 'unknown';
+        this.updateCategoryMetrics(metrics.byCategory, category, 'fp');
+      }
+    }
+
+    console.log(`📊 Found ${unmatchedCount} unmatched scan results counted as false positives`);
 
     // Calculate final metrics
     const finalMetrics = this.calculateFinalMetrics(metrics);
@@ -237,6 +260,33 @@ export class OwaspBenchmarkEvaluator {
     }
     
     return 'UNKNOWN';
+  }
+
+  /**
+   * Map vulnerability type back to benchmark category (reverse mapping)
+   * @param {string} vulnType - Vulnerability type
+   * @returns {string} Benchmark category
+   */
+  mapVulnerabilityTypeToCategory(vulnType) {
+    for (const [category, mappedType] of this.vulnerabilityMappings.entries()) {
+      if (mappedType === vulnType) {
+        return category;
+      }
+    }
+    
+    // Handle common types not in mapping
+    const typeMap = {
+      'XSS': 'xss',
+      'SECURITY_MISCONFIGURATION': 'unknown',
+      'CRYPTOGRAPHIC_ISSUE': 'crypto',
+      'SENSITIVE_DATA_EXPOSURE': 'unknown',
+      'INSECURE_DESERIALIZATION': 'unknown',
+      'XML_EXTERNAL_ENTITY': 'unknown',
+      'BROKEN_AUTHENTICATION': 'unknown',
+      'BROKEN_ACCESS_CONTROL': 'unknown'
+    };
+    
+    return typeMap[vulnType] || 'unknown';
   }
 
   /**

@@ -9,7 +9,6 @@ export class ValidatorAgent extends BaseAgent {
     super(id, config, sessionId);
     this.plugin = config.plugin;
     this.falsePositiveThreshold = config.falsePositiveThreshold || 0.3;
-    this.enableAI = true; // Always use LLM for validation
     this.concurrency = config.concurrency || 5;
     this.llmService = llmService;
   }
@@ -24,22 +23,19 @@ export class ValidatorAgent extends BaseAgent {
       throw new Error('Validator agent requires a language plugin');
     }
 
-    // Initialize LLM service if enabled
-    if (this.enableAI) {
-      try {
-        await this.llmService.initialize();
-        this.log('info', 'LLM service initialized for validation');
-      } catch (error) {
-        this.log('warn', 'LLM initialization failed, falling back to heuristics', { error: error.message });
-        this.enableAI = false;
-      }
+    // Initialize LLM service
+    try {
+      await this.llmService.initialize();
+      this.log('info', 'LLM service initialized for validation');
+    } catch (error) {
+      this.log('error', 'LLM initialization failed', { error: error.message });
+      throw new Error(`Failed to initialize LLM service for validation: ${error.message}`);
     }
 
     await super.initialize();
     this.log('info', 'Validator agent initialized', { 
       plugin: this.plugin.name,
-      falsePositiveThreshold: this.falsePositiveThreshold,
-      enableAI: this.enableAI
+      falsePositiveThreshold: this.falsePositiveThreshold
     });
   }
 
@@ -150,19 +146,17 @@ export class ValidatorAgent extends BaseAgent {
       riskAssessment: await this.assessRisk(vulnerability)
     };
 
-    // Add LLM-based validation if enabled
-    if (this.enableAI) {
-      try {
-        validation.llmValidation = await this.validateWithLLM(vulnerability);
-      } catch (error) {
-        this.log('warn', `LLM validation failed for ${vulnerability.type}`, { error: error.message });
-        validation.llmValidation = {
-          isValid: true, // Default to valid if LLM fails
-          confidence: 0.5,
-          reasoning: 'LLM validation failed',
-          error: error.message
-        };
-      }
+    // Add LLM-based validation
+    try {
+      validation.llmValidation = await this.validateWithLLM(vulnerability);
+    } catch (error) {
+      this.log('warn', `LLM validation failed for ${vulnerability.type}`, { error: error.message });
+      validation.llmValidation = {
+        isValid: true, // Default to valid if LLM fails
+        confidence: 0.5,
+        reasoning: 'LLM validation failed',
+        error: error.message
+      };
     }
 
     return validation;
@@ -174,9 +168,6 @@ export class ValidatorAgent extends BaseAgent {
    * @returns {object} LLM validation results
    */
   async validateWithLLM(vulnerability) {
-    if (!this.enableAI) {
-      return null;
-    }
 
     try {
       // Get surrounding code context for better validation

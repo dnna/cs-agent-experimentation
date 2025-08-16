@@ -7,8 +7,7 @@ export class AnalyzerAgent extends BaseAgent {
   constructor(id, config = {}, sessionId = null) {
     super(id, config, sessionId);
     this.plugin = config.plugin;
-    this.concurrency = config.concurrency || 3;
-    this.enableAI = config.enableAI || false;
+    this.concurrency = config.concurrency || 8;
     this.confidenceThreshold = config.confidenceThreshold || 0.5;
     this.mode = config.mode || 'vulnerability_analysis';
   }
@@ -32,7 +31,6 @@ export class AnalyzerAgent extends BaseAgent {
     this.log('info', 'Analyzer agent initialized', { 
       plugin: this.plugin.name,
       mode: this.mode,
-      enableAI: this.enableAI,
       confidenceThreshold: this.confidenceThreshold
     });
   }
@@ -178,18 +176,25 @@ export class AnalyzerAgent extends BaseAgent {
    * @returns {Array} Processed vulnerabilities
    */
   async postProcessVulnerabilities(vulnerabilities) {
+    console.log(`📊 Post-processing ${vulnerabilities.length} vulnerabilities...`);
+    
     // Remove duplicates
+    console.log(`  🔍 Removing duplicates...`);
     const deduplicated = this.deduplicateVulnerabilities(vulnerabilities);
+    console.log(`  ✅ Deduplicated: ${vulnerabilities.length} → ${deduplicated.length} vulnerabilities`);
     
     // Filter by confidence threshold
+    console.log(`  🎯 Filtering by confidence threshold (${this.confidenceThreshold})...`);
     const filtered = deduplicated.filter(vuln => 
       vuln.confidence >= this.confidenceThreshold
     );
+    console.log(`  ✅ Filtered: ${deduplicated.length} → ${filtered.length} vulnerabilities`);
     
     // Enhance with additional context
     const enhanced = await this.enhanceVulnerabilities(filtered);
     
     // Sort by severity and confidence
+    console.log(`  📋 Sorting by severity and confidence...`);
     enhanced.sort((a, b) => {
       const severityOrder = { CRITICAL: 4, HIGH: 3, MEDIUM: 2, LOW: 1 };
       const severityDiff = severityOrder[b.severity] - severityOrder[a.severity];
@@ -201,6 +206,7 @@ export class AnalyzerAgent extends BaseAgent {
       return b.confidence - a.confidence;
     });
     
+    console.log(`✅ Post-processing complete: ${enhanced.length} final vulnerabilities`);
     return enhanced;
   }
 
@@ -233,22 +239,43 @@ export class AnalyzerAgent extends BaseAgent {
    * @returns {Array} Enhanced vulnerabilities
    */
   async enhanceVulnerabilities(vulnerabilities) {
-    const enhanced = [];
+    console.log(`🔧 Enhancing ${vulnerabilities.length} vulnerabilities with remediation advice...`);
     
-    for (const vuln of vulnerabilities) {
-      const enhancedVuln = {
-        ...vuln,
-        id: this.generateVulnerabilityId(vuln),
-        evidence: vuln.evidence, // Explicitly include evidence
-        discoveredBy: this.id,
-        discoveredAt: new Date().toISOString(),
-        risk: this.calculateRisk(vuln),
-        remediation: await this.generateRemediation(vuln)
-      };
-      
-      enhanced.push(enhancedVuln);
-    }
+    const enhanceVulnerability = async (vuln, index) => {
+      try {
+        console.log(`  Processing vulnerability ${index + 1}/${vulnerabilities.length}: ${vuln.type}`);
+        
+        const enhancedVuln = {
+          ...vuln,
+          id: this.generateVulnerabilityId(vuln),
+          evidence: vuln.evidence, // Explicitly include evidence
+          discoveredBy: this.id,
+          discoveredAt: new Date().toISOString(),
+          risk: this.calculateRisk(vuln),
+          remediation: await this.generateRemediation(vuln)
+        };
+        
+        return enhancedVuln;
+      } catch (error) {
+        console.log(`  ⚠️  Failed to enhance vulnerability ${index + 1}: ${error.message}`);
+        // Return vulnerability without remediation if enhancement fails
+        return {
+          ...vuln,
+          id: this.generateVulnerabilityId(vuln),
+          evidence: vuln.evidence,
+          discoveredBy: this.id,
+          discoveredAt: new Date().toISOString(),
+          risk: this.calculateRisk(vuln),
+          remediation: 'Remediation generation failed'
+        };
+      }
+    };
+
+    // Process vulnerabilities in parallel with concurrency limit
+    const enhancementConcurrency = 5; // Conservative limit for LLM calls
+    const enhanced = await this.processInParallel(vulnerabilities, enhanceVulnerability, enhancementConcurrency);
     
+    console.log(`✅ Enhanced ${enhanced.length} vulnerabilities`);
     return enhanced;
   }
 
