@@ -18,17 +18,24 @@ export class LLMConfig {
             contextWindow: 1047576,
             maxTokens: 32768,
             cost: { input: 0.0004, output: 0.0016 },
-            recommended: true
+            recommended: false
           },
           'gpt-4.1-nano': {
             contextWindow: 1047576,
             maxTokens: 32768,
             cost: { input: 0.0001, output: 0.0004 },
             recommended: false
+          },
+          'gpt-5-mini': {
+            contextWindow: 400000,
+            maxTokens: 128000,
+            cost: { input: 0.00025, output: 0.002 },
+            recommended: true,
+            features: ['reasoning_effort', 'verbosity']
           }
         },
         apiKeyEnv: 'OPENAI_API_KEY',
-        defaultModel: 'gpt-4.1-mini'
+        defaultModel: 'gpt-5-mini'
       },
       anthropic: {
         name: 'Anthropic',
@@ -157,10 +164,10 @@ export class LLMConfig {
     const configs = [
       {
         provider: 'openai',
-        model: 'gpt-4.1-mini',
+        model: 'gpt-5-mini',
         temperature: 0.1,
         maxTokens: 2000,
-        reason: 'Best balance of accuracy and cost for security analysis with 1M context window'
+        reason: 'Latest model with enhanced reasoning for security analysis with 400K context window'
       },
       {
         provider: 'anthropic',

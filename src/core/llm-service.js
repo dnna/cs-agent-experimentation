@@ -116,13 +116,21 @@ export class LLMService {
   async createLLMInstance() {
     switch (this.config.provider) {
       case 'openai':
-        return new ChatOpenAI({
+        const openAIConfig = {
           model: this.config.model,
-          temperature: this.config.temperature,
-          maxTokens: this.config.maxTokens,
           timeout: this.config.timeout,
           apiKey: process.env.OPENAI_API_KEY
-        });
+        };
+        
+        // Add GPT-5 specific parameters for faster responses
+        if (this.config.model && this.config.model.includes('gpt-5')) {
+          openAIConfig.modelKwargs = {
+            reasoning_effort: 'minimal',  // Minimize reasoning for faster responses
+            verbosity: 'low'  // Shorter responses
+          };
+        }
+        
+        return new ChatOpenAI(openAIConfig);
 
       case 'anthropic':
         return new ChatAnthropic({
@@ -151,12 +159,12 @@ export class LLMService {
    */
   getDefaultModel(provider) {
     const defaults = {
-      openai: 'gpt-4.1-nano',
+      openai: 'gpt-5-mini',
       anthropic: 'claude-3-sonnet-20240229',
       google: 'gemini-2.5-flash'
     };
     
-    return defaults[provider] || 'gpt-4.1-nano';
+    return defaults[provider] || 'gpt-5-mini';
   }
 
   /**
@@ -178,8 +186,6 @@ export class LLMService {
       ];
 
       const response = await this.llm.invoke(messages, {
-        temperature: options.temperature || this.config.temperature,
-        maxTokens: options.maxTokens || this.config.maxTokens,
         ...options
       });
 

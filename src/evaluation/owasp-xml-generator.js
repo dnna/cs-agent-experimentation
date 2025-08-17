@@ -10,7 +10,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export class OwaspXmlGenerator {
   constructor() {
     this.toolName = 'AI-Powered Agentic Scanner';
-    this.toolVersion = '1.0.0';
+    this.toolVersion = '1.2.0';
   }
 
   /**

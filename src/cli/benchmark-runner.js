@@ -17,7 +17,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
  */
 async function runBenchmark() {
   const benchmarkPath = '/Users/dnna/Projects/vulnerabilitydetect';
-  const outputDir = path.join(process.cwd(), 'benchmark-results');
+  const outputDir = path.join(process.cwd(), 'benchmark-results-v1.2.0-gpt5mini');
   
   console.log('🚀 Starting OWASP Benchmark evaluation...\n');
   
@@ -135,7 +135,7 @@ async function runBenchmark() {
     console.log('═══════════════════════════════════════════════════════════════');
     console.log('                    BENCHMARK RESULTS SUMMARY                  ');
     console.log('═══════════════════════════════════════════════════════════════');
-    console.log(`Tool: AI-Powered Agentic Scanner v1.0.0`);
+    console.log(`Tool: AI-Powered Agentic Scanner v1.2.0`);
     console.log(`Total Test Cases: ${metrics.totalTestCases}`);
     console.log(`Vulnerabilities Found: ${scanResults.vulnerabilities.length}`);
     console.log('');
@@ -181,7 +181,7 @@ function generateComparisonReport(metrics) {
 
 ## Tool Information
 - **Name**: AI-Powered Agentic Scanner
-- **Version**: 1.0.0
+- **Version**: 1.2.0
 - **Date**: ${new Date().toISOString()}
 
 ## Overall Performance
