@@ -1,0 +1,22 @@
+{
+  "repository": "/Users/dnna/Projects/vulnerabilitydetect",
+  "sessionId": "session-1755356078421-bbi9j2t2l",
+  "languages": {
+    "primary": "java",
+    "secondary": [],
+    "confidence": {
+      "java": 1
+    },
+    "details": {}
+  },
+  "vulnerabilities": [],
+  "metrics": {},
+  "timestamp": "2025-08-16T14:54:38.422Z",
+  "duration": 3928805,
+  "metadata": {
+    "filteredFrom": 3137,
+    "confidenceThreshold": 0.8,
+    "filteredAt": "2025-08-16T16:17:09.647Z",
+    "scannerVersion": "1.1.0"
+  }
+}

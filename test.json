@@ -1,0 +1,16 @@
+🔍 Starting vulnerability scan...
+🚀 Initializing AI-Powered Agentic Vulnerability Scanner...
+✅ Scanner initialized successfully
+Repository: test-java-project
+Language: java
+Max files: 10000
+Confidence threshold: 0.5
+
+🔍 Starting scan of repository: test-java-project
+📝 Primary language: java
+[2025-07-10T02:44:17.456Z] [java] INFO: Java plugin initialized successfully {}
+Starting vulnerability analysis on 11 files
+Analyzing 11 valid files
+Analyzing file 1/11: src/main/java/com/example/AccessControlIssues.java
+Analyzing file 2/11: src/main/java/com/example/AuthenticationBypass.java
+Analyzing file 3/11: src/main/java/com/example/CommandInjection.java

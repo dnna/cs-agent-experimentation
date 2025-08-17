@@ -1,0 +1,2170 @@
+# Starting vulnerability scan...
+# Initializing AI-Powered Agentic Vulnerability Scanner...
+# Scanner initialized successfully
+Repository: test-java-project
+Language: java
+Max files: 10000
+Confidence threshold: 0.5
+
+# Starting scan of repository: test-java-project
+# Primary language: java
+[2025-07-10T02:10:31.796Z] [java] INFO: Java plugin initialized successfully {}
+Starting vulnerability analysis on 11 files
+Analyzing 11 valid files
+Analyzing file 1/11: src/main/java/com/example/AccessControlIssues.java
+Analyzing file 2/11: src/main/java/com/example/AuthenticationBypass.java
+Analyzing file 3/11: src/main/java/com/example/CommandInjection.java
+Found 0 vulnerabilities in src/main/java/com/example/AuthenticationBypass.java
+Found 3 vulnerabilities in src/main/java/com/example/CommandInjection.java
+Found 0 vulnerabilities in src/main/java/com/example/AccessControlIssues.java
+Analyzing file 4/11: src/main/java/com/example/InsecureDeserialization.java
+Analyzing file 5/11: src/main/java/com/example/LdapInjection.java
+Analyzing file 6/11: src/main/java/com/example/SecurityMisconfiguration.java
+Found 3 vulnerabilities in src/main/java/com/example/LdapInjection.java
+Found 3 vulnerabilities in src/main/java/com/example/InsecureDeserialization.java
+Found 7 vulnerabilities in src/main/java/com/example/SecurityMisconfiguration.java
+Analyzing file 7/11: src/main/java/com/example/SensitiveDataExposure.java
+Analyzing file 8/11: src/main/java/com/example/SsrfVulnerability.java
+Analyzing file 9/11: src/main/java/com/example/VulnerableComponents.java
+Found 5 vulnerabilities in src/main/java/com/example/VulnerableComponents.java
+Found 3 vulnerabilities in src/main/java/com/example/SensitiveDataExposure.java
+Found 4 vulnerabilities in src/main/java/com/example/SsrfVulnerability.java
+Analyzing file 10/11: src/main/java/com/example/VulnerableExample.java
+Analyzing file 11/11: src/main/java/com/example/XxeVulnerability.java
+Found 3 vulnerabilities in src/main/java/com/example/VulnerableExample.java
+Found 2 vulnerabilities in src/main/java/com/example/XxeVulnerability.java
+Found 33 total vulnerabilities
+# Scan completed in 1m 0s
+# Total vulnerabilities found: 25
+{
+  "repository": "test-java-project",
+  "sessionId": "session-1752113431785-h281zk4fp",
+  "languages": {
+    "primary": "java",
+    "secondary": [],
+    "confidence": {
+      "java": 1
+    },
+    "details": {}
+  },
+  "vulnerabilities": [
+    {
+      "id": "vuln-e1zsd1",
+      "type": "SENSITIVE_DATA_EXPOSURE",
+      "severity": "CRITICAL",
+      "confidence": 0.7736666666666667,
+      "file": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/SensitiveDataExposure.java",
+      "line": 3,
+      "description": "Logging sensitive user credentials (username and password) exposes sensitive data in logs, risking data exposure and potential misuse.",
+      "evidence": "public void loginUser(String username, String password) {\n        logger.info(\"User login attempt: \" + username + \" with password: \" + password);\n        if (authenticateUser(username, password)) {\n            logger.info(\"Login successful for user: \" + username);\n        } else {\n            logger.warning(\"Login failed for user: \" + username + \" password: \" + password);\n        }\n    \n}",
+      "cwe": 200,
+      "owasp": "A01:2021",
+      "context": {
+        "filePath": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/SensitiveDataExposure.java",
+        "relativePath": "src/main/java/com/example/SensitiveDataExposure.java",
+        "fileType": "source",
+        "language": "java",
+        "size": 1699,
+        "plugin": "java",
+        "method": "loginUser",
+        "framework": "Java",
+        "dependencies": [
+          "javax.servlet",
+          "java.sql",
+          "java.io"
+        ]
+      },
+      "remediation": "Remove logging of sensitive credentials. Log only non-sensitive information such as login attempts without passwords.",
+      "references": [],
+      "plugin": "java",
+      "timestamp": "2025-07-10T02:10:42.360Z",
+      "relativePath": "src/main/java/com/example/SensitiveDataExposure.java",
+      "discoveredBy": "analyzer-3-1752113431804",
+      "discoveredAt": "2025-07-10T02:10:45.128Z",
+      "risk": 100,
+      "validation": {
+        "contextCheck": {
+          "isTestCode": false,
+          "isGeneratedCode": false,
+          "isDeadCode": false,
+          "hasProperContext": true,
+          "score": 0.7
+        },
+        "patternCheck": {
+          "matchesKnownPatterns": false,
+          "matchedPatterns": 0,
+          "isFalsePositive": false,
+          "score": 0.5
+        },
+        "semanticCheck": {
+          "hasSemanticContext": true,
+          "hasInputValidation": false,
+          "hasOutputEncoding": false,
+          "hasSecurityControls": false,
+          "score": 1
+        },
+        "riskAssessment": {
+          "exploitability": 0.5,
+          "impact": 1,
+          "likelihood": 0.5,
+          "riskScore": 0.6666666666666666,
+          "riskLevel": "HIGH"
+        },
+        "llmValidation": {
+          "isValid": true,
+          "confidence": 0.9,
+          "reasoning": "The code explicitly logs sensitive user credentials, including passwords, in plaintext. This is a clear security risk as logs can be accessed by unauthorized personnel or compromised systems, leading to potential data breaches. The logging occurs at login attempts and failures, which are common points where sensitive data should not be recorded. The presence of such logging indicates a genuine vulnerability, especially given the critical severity assigned. The only reason for a slightly less than perfect confidence is the absence of information about log access controls or additional security measures, but the direct logging of passwords is inherently insecure.",
+          "riskLevel": "CRITICAL",
+          "exploitability": 0.7,
+          "impact": 0.9,
+          "recommendations": [
+            "Remove logging of passwords and sensitive credentials.",
+            "Implement secure logging practices that exclude sensitive data.",
+            "Use placeholders or anonymized data in logs.",
+            "Review and enforce logging policies that prohibit sensitive data exposure.",
+            "Educate developers on secure coding and logging practices."
+          ],
+          "validatedAt": "2025-07-10T02:10:47.031Z",
+          "validatedBy": "llm-openai-gpt-4.1-nano",
+          "originalVulnerability": "vuln-e1zsd1"
+        },
+        "isValid": true,
+        "validatedAt": "2025-07-10T02:10:47.031Z",
+        "validatedBy": "validator-4-1752113445130"
+      }
+    },
+    {
+      "id": "vuln-kyslcj",
+      "type": "SENSITIVE_DATA_EXPOSURE",
+      "severity": "CRITICAL",
+      "confidence": 0.7736666666666667,
+      "file": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/SensitiveDataExposure.java",
+      "line": 5,
+      "description": "Logging sensitive user credentials (username and password) exposes sensitive data in logs, risking data exposure and potential misuse.",
+      "evidence": "public void loginUser(String username, String password) {\n        logger.info(\"User login attempt: \" + username + \" with password: \" + password);\n        if (authenticateUser(username, password)) {\n            logger.info(\"Login successful for user: \" + username);\n        } else {\n            logger.warning(\"Login failed for user: \" + username + \" password: \" + password);\n        }\n    \n}",
+      "cwe": 200,
+      "owasp": "A01:2021",
+      "context": {
+        "filePath": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/SensitiveDataExposure.java",
+        "relativePath": "src/main/java/com/example/SensitiveDataExposure.java",
+        "fileType": "source",
+        "language": "java",
+        "size": 1699,
+        "plugin": "java",
+        "method": "loginUser",
+        "framework": "Java",
+        "dependencies": [
+          "javax.servlet",
+          "java.sql",
+          "java.io"
+        ]
+      },
+      "remediation": "Remove logging of sensitive credentials. Log only non-sensitive information such as login attempts without passwords.",
+      "references": [],
+      "plugin": "java",
+      "timestamp": "2025-07-10T02:10:42.360Z",
+      "relativePath": "src/main/java/com/example/SensitiveDataExposure.java",
+      "discoveredBy": "analyzer-3-1752113431804",
+      "discoveredAt": "2025-07-10T02:10:45.128Z",
+      "risk": 100,
+      "validation": {
+        "contextCheck": {
+          "isTestCode": false,
+          "isGeneratedCode": false,
+          "isDeadCode": false,
+          "hasProperContext": true,
+          "score": 0.7
+        },
+        "patternCheck": {
+          "matchesKnownPatterns": false,
+          "matchedPatterns": 0,
+          "isFalsePositive": false,
+          "score": 0.5
+        },
+        "semanticCheck": {
+          "hasSemanticContext": true,
+          "hasInputValidation": false,
+          "hasOutputEncoding": false,
+          "hasSecurityControls": false,
+          "score": 1
+        },
+        "riskAssessment": {
+          "exploitability": 0.5,
+          "impact": 1,
+          "likelihood": 0.5,
+          "riskScore": 0.6666666666666666,
+          "riskLevel": "HIGH"
+        },
+        "llmValidation": {
+          "isValid": true,
+          "confidence": 0.9,
+          "reasoning": "The code explicitly logs sensitive user credentials, including passwords, in plaintext. This is a clear security risk as logs can be accessed by unauthorized personnel or compromised systems, leading to potential data breaches. The logging of passwords is a well-known security anti-pattern and violates best practices for handling sensitive information. The code does not show any input sanitization or masking, and there are no security controls or framework protections that mitigate this exposure. Given the severity of exposing credentials in logs, this constitutes a legitimate vulnerability.",
+          "riskLevel": "CRITICAL",
+          "exploitability": 0.8,
+          "impact": 0.9,
+          "recommendations": [
+            "Remove logging of passwords entirely.",
+            "Implement secure logging practices that do not include sensitive data.",
+            "Use masking or hashing if logging of sensitive data is absolutely necessary.",
+            "Review and enforce security policies for logging sensitive information."
+          ],
+          "validatedAt": "2025-07-10T02:10:46.829Z",
+          "validatedBy": "llm-openai-gpt-4.1-nano",
+          "originalVulnerability": "vuln-kyslcj"
+        },
+        "isValid": true,
+        "validatedAt": "2025-07-10T02:10:46.829Z",
+        "validatedBy": "validator-4-1752113445130"
+      }
+    },
+    {
+      "id": "vuln-7uxzc3",
+      "type": "PATH_TRAVERSAL",
+      "severity": "CRITICAL",
+      "confidence": 0.7783333333333333,
+      "file": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/VulnerableComponents.java",
+      "line": 4,
+      "description": "The code concatenates user input 'filename' directly into a FileInputStream without validation, leading to potential path traversal vulnerability.",
+      "evidence": "public void processUploadedFile(HttpServletRequest request) {\n        String filename = request.getParameter(\"filename\");\n        \n        \n        FileInputStream fis = new FileInputStream(filename);\n        \n        \n        ZipInputStream zis = new ZipInputStream(fis);\n        ZipEntry entry;\n        while ((entry = zis.getNextEntry()) != null) {\n            String entryName = entry.getName();\n            \n            java.io.File file = new java.io.File(\"/uploads/\" + entryName);\n            file.createNewFile();\n        }\n    \n}",
+      "cwe": 22,
+      "owasp": "A01:2021",
+      "context": {
+        "filePath": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/VulnerableComponents.java",
+        "relativePath": "src/main/java/com/example/VulnerableComponents.java",
+        "fileType": "source",
+        "language": "java",
+        "size": 2085,
+        "plugin": "java",
+        "method": "processUploadedFile",
+        "framework": "Java",
+        "dependencies": [
+          "javax.servlet",
+          "java.sql",
+          "java.io"
+        ]
+      },
+      "remediation": "Validate and sanitize the 'filename' parameter to prevent directory traversal, or use a safe, predefined directory for file access.",
+      "references": [],
+      "plugin": "java",
+      "timestamp": "2025-07-10T02:10:42.194Z",
+      "relativePath": "src/main/java/com/example/VulnerableComponents.java",
+      "discoveredBy": "analyzer-3-1752113431804",
+      "discoveredAt": "2025-07-10T02:10:45.128Z",
+      "risk": 100,
+      "validation": {
+        "contextCheck": {
+          "isTestCode": false,
+          "isGeneratedCode": false,
+          "isDeadCode": false,
+          "hasProperContext": true,
+          "score": 0.7
+        },
+        "patternCheck": {
+          "matchesKnownPatterns": false,
+          "matchedPatterns": 0,
+          "isFalsePositive": false,
+          "score": 0.5
+        },
+        "semanticCheck": {
+          "hasSemanticContext": true,
+          "hasInputValidation": false,
+          "hasOutputEncoding": false,
+          "hasSecurityControls": false,
+          "score": 1
+        },
+        "riskAssessment": {
+          "exploitability": 0.7,
+          "impact": 1,
+          "likelihood": 0.5,
+          "riskScore": 0.7333333333333334,
+          "riskLevel": "HIGH"
+        },
+        "llmValidation": {
+          "isValid": true,
+          "confidence": 0.9,
+          "reasoning": "The code directly uses user input ('filename' parameter) to instantiate a FileInputStream without any validation, sanitization, or checks against directory traversal patterns. This allows an attacker to specify a path like '../../etc/passwd' or other sensitive files, leading to a path traversal vulnerability. The code does not implement any security controls such as input validation, whitelisting, or canonicalization to prevent such exploits. Given the context and the evidence, this appears to be a legitimate vulnerability.",
+          "riskLevel": "CRITICAL",
+          "exploitability": 0.8,
+          "impact": 0.9,
+          "recommendations": [
+            "Implement input validation to restrict 'filename' to safe directories or filenames.",
+            "Use canonical paths to resolve and verify the file location.",
+            "Apply least privilege principles to limit file system access.",
+            "Consider using a whitelist of allowed filenames or paths.",
+            "Implement security controls such as sandboxing or access controls to prevent unauthorized file access."
+          ],
+          "validatedAt": "2025-07-10T02:10:46.945Z",
+          "validatedBy": "llm-openai-gpt-4.1-nano",
+          "originalVulnerability": "vuln-7uxzc3"
+        },
+        "isValid": true,
+        "validatedAt": "2025-07-10T02:10:46.945Z",
+        "validatedBy": "validator-4-1752113445130"
+      }
+    },
+    {
+      "id": "vuln-b0vl40",
+      "type": "PATH_TRAVERSAL",
+      "severity": "CRITICAL",
+      "confidence": 0.7783333333333333,
+      "file": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/VulnerableComponents.java",
+      "line": 8,
+      "description": "The code uses 'entryName' from a zip entry directly in file path creation without validation, allowing zip slip attack.",
+      "evidence": "public void processUploadedFile(HttpServletRequest request) {\n        String filename = request.getParameter(\"filename\");\n        \n        \n        FileInputStream fis = new FileInputStream(filename);\n        \n        \n        ZipInputStream zis = new ZipInputStream(fis);\n        ZipEntry entry;\n        while ((entry = zis.getNextEntry()) != null) {\n            String entryName = entry.getName();\n            \n            java.io.File file = new java.io.File(\"/uploads/\" + entryName);\n            file.createNewFile();\n        }\n    \n}",
+      "cwe": 22,
+      "owasp": "A01:2021",
+      "context": {
+        "filePath": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/VulnerableComponents.java",
+        "relativePath": "src/main/java/com/example/VulnerableComponents.java",
+        "fileType": "source",
+        "language": "java",
+        "size": 2085,
+        "plugin": "java",
+        "method": "processUploadedFile",
+        "framework": "Java",
+        "dependencies": [
+          "javax.servlet",
+          "java.sql",
+          "java.io"
+        ]
+      },
+      "remediation": "Validate 'entryName' to prevent directory traversal, or sanitize the zip entry names before extracting.",
+      "references": [],
+      "plugin": "java",
+      "timestamp": "2025-07-10T02:10:42.194Z",
+      "relativePath": "src/main/java/com/example/VulnerableComponents.java",
+      "discoveredBy": "analyzer-3-1752113431804",
+      "discoveredAt": "2025-07-10T02:10:45.129Z",
+      "risk": 100,
+      "validation": {
+        "contextCheck": {
+          "isTestCode": false,
+          "isGeneratedCode": false,
+          "isDeadCode": false,
+          "hasProperContext": true,
+          "score": 0.7
+        },
+        "patternCheck": {
+          "matchesKnownPatterns": false,
+          "matchedPatterns": 0,
+          "isFalsePositive": false,
+          "score": 0.5
+        },
+        "semanticCheck": {
+          "hasSemanticContext": true,
+          "hasInputValidation": false,
+          "hasOutputEncoding": false,
+          "hasSecurityControls": false,
+          "score": 1
+        },
+        "riskAssessment": {
+          "exploitability": 0.7,
+          "impact": 1,
+          "likelihood": 0.5,
+          "riskScore": 0.7333333333333334,
+          "riskLevel": "HIGH"
+        },
+        "llmValidation": {
+          "isValid": true,
+          "confidence": 0.9,
+          "reasoning": "The code directly concatenates the zip entry name into a file path without any validation or sanitization, which is a classic path traversal vulnerability. The use of 'entry.getName()' from the ZipInputStream can include '../' sequences, allowing an attacker to craft a zip file with malicious entry names that traverse directories outside the intended '/uploads/' directory. There are no checks or filters to prevent such traversal, and the code does not sanitize or validate the entry names before creating files. This makes the vulnerability legitimate. The code also does not appear to have any framework-specific protections or input validation that would mitigate this issue. Given the critical severity and the direct use of unvalidated zip entry names in file paths, this is a genuine path traversal vulnerability.",
+          "riskLevel": "CRITICAL",
+          "exploitability": 0.8,
+          "impact": 0.9,
+          "recommendations": [
+            "Validate and sanitize 'entryName' to remove any '../' sequences or other path traversal characters.",
+            "Use a safe extraction method that enforces extraction within a specific directory.",
+            "Implement input validation on zip entry names before processing.",
+            "Consider using libraries or functions that handle zip extraction securely, avoiding manual path concatenation."
+          ],
+          "validatedAt": "2025-07-10T02:10:47.461Z",
+          "validatedBy": "llm-openai-gpt-4.1-nano",
+          "originalVulnerability": "vuln-b0vl40"
+        },
+        "isValid": true,
+        "validatedAt": "2025-07-10T02:10:47.461Z",
+        "validatedBy": "validator-4-1752113445130"
+      }
+    },
+    {
+      "id": "vuln-fouu0o",
+      "type": "SQL_INJECTION",
+      "severity": "CRITICAL",
+      "confidence": 0.7829999999999999,
+      "file": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/VulnerableExample.java",
+      "line": 4,
+      "description": "The code concatenates user input directly into an SQL query, which can be exploited for SQL injection attacks.",
+      "evidence": "public void sqlInjectionVulnerable(HttpServletRequest request, Connection conn) {\n        String userId = request.getParameter(\"userId\");\n        Statement stmt = conn.createStatement();\n        String query = \"SELECT * FROM users WHERE id = \" + userId;\n        ResultSet rs = stmt.executeQuery(query);\n    \n}",
+      "cwe": 89,
+      "owasp": "A03:2021",
+      "context": {
+        "filePath": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/VulnerableExample.java",
+        "relativePath": "src/main/java/com/example/VulnerableExample.java",
+        "fileType": "source",
+        "language": "java",
+        "size": 1055,
+        "plugin": "java",
+        "method": "sqlInjectionVulnerable",
+        "framework": "Java",
+        "dependencies": [
+          "javax.servlet",
+          "java.sql",
+          "java.io"
+        ]
+      },
+      "remediation": "Use PreparedStatement with parameterized queries to prevent SQL injection. For example: PreparedStatement pstmt = conn.prepareStatement(\"SELECT * FROM users WHERE id = ?\"); pstmt.setString(1, userId);",
+      "references": [],
+      "plugin": "java",
+      "timestamp": "2025-07-10T02:10:44.755Z",
+      "relativePath": "src/main/java/com/example/VulnerableExample.java",
+      "discoveredBy": "analyzer-3-1752113431804",
+      "discoveredAt": "2025-07-10T02:10:45.129Z",
+      "risk": 100,
+      "validation": {
+        "contextCheck": {
+          "isTestCode": false,
+          "isGeneratedCode": false,
+          "isDeadCode": false,
+          "hasProperContext": true,
+          "score": 0.7
+        },
+        "patternCheck": {
+          "matchesKnownPatterns": false,
+          "matchedPatterns": 0,
+          "isFalsePositive": false,
+          "score": 0.5
+        },
+        "semanticCheck": {
+          "hasSemanticContext": true,
+          "hasInputValidation": false,
+          "hasOutputEncoding": false,
+          "hasSecurityControls": false,
+          "score": 1
+        },
+        "riskAssessment": {
+          "exploitability": 0.9,
+          "impact": 1,
+          "likelihood": 0.5,
+          "riskScore": 0.7999999999999999,
+          "riskLevel": "HIGH"
+        },
+        "llmValidation": {
+          "isValid": true,
+          "confidence": 0.9,
+          "reasoning": "The code directly concatenates user input ('userId') into an SQL query string without any sanitization or parameterization, which is a classic SQL injection vulnerability. The use of 'Statement' instead of 'PreparedStatement' further confirms the lack of input validation or parameter binding, making it highly exploitable. The context and code snippet clearly demonstrate an insecure pattern that can be exploited by malicious actors to execute arbitrary SQL commands.",
+          "riskLevel": "CRITICAL",
+          "exploitability": 0.9,
+          "impact": 0.8,
+          "recommendations": [
+            "Replace Statement with PreparedStatement and use parameterized queries.",
+            "Validate and sanitize user input before use.",
+            "Implement security controls such as input validation and least privilege database accounts.",
+            "Review code for similar patterns and refactor accordingly."
+          ],
+          "validatedAt": "2025-07-10T02:10:46.807Z",
+          "validatedBy": "llm-openai-gpt-4.1-nano",
+          "originalVulnerability": "vuln-fouu0o"
+        },
+        "isValid": true,
+        "validatedAt": "2025-07-10T02:10:46.807Z",
+        "validatedBy": "validator-4-1752113445130"
+      }
+    },
+    {
+      "id": "vuln-vdikgv",
+      "type": "COMMAND_INJECTION",
+      "severity": "CRITICAL",
+      "confidence": 0.8089999999999999,
+      "file": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/CommandInjection.java",
+      "line": 4,
+      "description": "User input from request parameter 'cmd' is directly concatenated into a system command without validation or sanitization, leading to command injection vulnerability.",
+      "evidence": "public void executeCommand(HttpServletRequest request) {\n        String command = request.getParameter(\"cmd\");\n        Runtime.getRuntime().exec(\"ping \" + command);\n    \n}",
+      "cwe": 78,
+      "owasp": "A03:2021",
+      "context": {
+        "filePath": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/CommandInjection.java",
+        "relativePath": "src/main/java/com/example/CommandInjection.java",
+        "fileType": "source",
+        "language": "java",
+        "size": 916,
+        "plugin": "java",
+        "method": "executeCommand",
+        "framework": "Java",
+        "dependencies": [
+          "javax.servlet",
+          "java.sql",
+          "java.io"
+        ]
+      },
+      "remediation": "Validate and sanitize the 'cmd' parameter before using it in a system command, or use safer APIs that do not invoke the shell directly.",
+      "references": [],
+      "plugin": "java",
+      "timestamp": "2025-07-10T02:10:33.366Z",
+      "relativePath": "src/main/java/com/example/CommandInjection.java",
+      "discoveredBy": "analyzer-3-1752113431804",
+      "discoveredAt": "2025-07-10T02:10:45.128Z",
+      "risk": 90,
+      "validation": {
+        "contextCheck": {
+          "isTestCode": false,
+          "isGeneratedCode": false,
+          "isDeadCode": false,
+          "hasProperContext": true,
+          "score": 0.7
+        },
+        "patternCheck": {
+          "matchesKnownPatterns": true,
+          "matchedPatterns": 1,
+          "isFalsePositive": false,
+          "score": 0.7
+        },
+        "semanticCheck": {
+          "hasSemanticContext": true,
+          "hasInputValidation": false,
+          "hasOutputEncoding": false,
+          "hasSecurityControls": false,
+          "score": 1
+        },
+        "riskAssessment": {
+          "exploitability": 0.9,
+          "impact": 1,
+          "likelihood": 0.5,
+          "riskScore": 0.7999999999999999,
+          "riskLevel": "HIGH"
+        },
+        "llmValidation": {
+          "isValid": true,
+          "confidence": 0.9,
+          "reasoning": "The code directly concatenates user input from the 'cmd' request parameter into a system command without any validation, sanitization, or escaping. This creates a clear command injection vector, as an attacker can supply malicious input to execute arbitrary commands. The code does not employ any security controls such as input validation, whitelisting, or use of safer APIs like ProcessBuilder with arguments, which would mitigate this risk. Given the simplicity of the code and the direct concatenation, this is a legitimate vulnerability.",
+          "riskLevel": "CRITICAL",
+          "exploitability": 0.9,
+          "impact": 0.9,
+          "recommendations": [
+            "Implement input validation and sanitization for the 'cmd' parameter.",
+            "Use safer APIs like ProcessBuilder with command arguments as separate parameters.",
+            "Restrict the input to known safe values or patterns.",
+            "Implement security controls such as input whitelisting or command execution restrictions."
+          ],
+          "validatedAt": "2025-07-10T02:10:49.583Z",
+          "validatedBy": "llm-openai-gpt-4.1-nano",
+          "originalVulnerability": "vuln-vdikgv"
+        },
+        "isValid": true,
+        "validatedAt": "2025-07-10T02:10:49.583Z",
+        "validatedBy": "validator-4-1752113445130"
+      }
+    },
+    {
+      "id": "vuln-rlqzlt",
+      "type": "INSECURE_DESERIALIZATION",
+      "severity": "CRITICAL",
+      "confidence": 0.7436666666666667,
+      "file": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/InsecureDeserialization.java",
+      "line": 4,
+      "description": "The method deserializes user input directly using ObjectInputStream without any validation or restrictions, making it vulnerable to remote code execution via malicious serialized objects.",
+      "evidence": "public Object deserializeUserInput(HttpServletRequest request) {\n        String serializedData = request.getParameter(\"data\");\n        byte[] data = serializedData.getBytes();\n        ByteArrayInputStream bis = new ByteArrayInputStream(data);\n        ObjectInputStream ois = new ObjectInputStream(bis);\n        return ois.readObject();\n    \n}",
+      "cwe": 502,
+      "owasp": "A08:2021",
+      "context": {
+        "filePath": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/InsecureDeserialization.java",
+        "relativePath": "src/main/java/com/example/InsecureDeserialization.java",
+        "fileType": "source",
+        "language": "java",
+        "size": 1209,
+        "plugin": "java",
+        "method": "deserializeUserInput",
+        "framework": "Java",
+        "dependencies": [
+          "javax.servlet",
+          "java.sql",
+          "java.io"
+        ]
+      },
+      "remediation": "Avoid deserializing untrusted data. If deserialization is necessary, implement a validation mechanism or use a safe serialization framework that restricts object types.",
+      "references": [],
+      "plugin": "java",
+      "timestamp": "2025-07-10T02:10:35.203Z",
+      "relativePath": "src/main/java/com/example/InsecureDeserialization.java",
+      "discoveredBy": "analyzer-3-1752113431804",
+      "discoveredAt": "2025-07-10T02:10:45.128Z",
+      "risk": 90,
+      "validation": {
+        "contextCheck": {
+          "isTestCode": false,
+          "isGeneratedCode": false,
+          "isDeadCode": false,
+          "hasProperContext": true,
+          "score": 0.7
+        },
+        "patternCheck": {
+          "matchesKnownPatterns": false,
+          "matchedPatterns": 0,
+          "isFalsePositive": false,
+          "score": 0.5
+        },
+        "semanticCheck": {
+          "hasSemanticContext": true,
+          "hasInputValidation": false,
+          "hasOutputEncoding": false,
+          "hasSecurityControls": false,
+          "score": 1
+        },
+        "riskAssessment": {
+          "exploitability": 0.5,
+          "impact": 1,
+          "likelihood": 0.5,
+          "riskScore": 0.6666666666666666,
+          "riskLevel": "HIGH"
+        },
+        "llmValidation": {
+          "isValid": true,
+          "confidence": 0.9,
+          "reasoning": "The code directly deserializes user input without any validation, filtering, or restrictions, which is a well-known insecure pattern. The use of ObjectInputStream on untrusted data is a classic vulnerability that can lead to remote code execution, especially if the application deserializes malicious objects crafted by an attacker. The code does not implement any security controls such as whitelisting classes, using a safe deserialization library, or validating the input data before deserialization. Given the severity level is marked as CRITICAL and the code pattern matches common insecure deserialization practices, this is a legitimate vulnerability.",
+          "riskLevel": "CRITICAL",
+          "exploitability": 0.8,
+          "impact": 0.9,
+          "recommendations": [
+            "Implement a whitelist of allowed classes during deserialization.",
+            "Use safer serialization/deserialization libraries that do not execute code during deserialization.",
+            "Validate and sanitize input data before deserialization.",
+            "Consider alternative data formats such as JSON or XML with proper validation."
+          ],
+          "validatedAt": "2025-07-10T02:10:49.922Z",
+          "validatedBy": "llm-openai-gpt-4.1-nano",
+          "originalVulnerability": "vuln-rlqzlt"
+        },
+        "isValid": true,
+        "validatedAt": "2025-07-10T02:10:49.923Z",
+        "validatedBy": "validator-4-1752113445130"
+      }
+    },
+    {
+      "id": "vuln-ny0jjh",
+      "type": "INSECURE_DESERIALIZATION",
+      "severity": "CRITICAL",
+      "confidence": 0.7436666666666667,
+      "file": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/InsecureDeserialization.java",
+      "line": 3,
+      "description": "Deserializing data directly from an untrusted source without validation or restrictions can lead to remote code execution or other security issues.",
+      "evidence": "public Object deserializeWithClassLoader(byte[] data) {\n        ByteArrayInputStream bis = new ByteArrayInputStream(data);\n        ObjectInputStream ois = new ObjectInputStream(bis);\n        return ois.readObject();\n    \n}",
+      "cwe": 502,
+      "owasp": "A08:2021",
+      "context": {
+        "filePath": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/InsecureDeserialization.java",
+        "relativePath": "src/main/java/com/example/InsecureDeserialization.java",
+        "fileType": "source",
+        "language": "java",
+        "size": 1209,
+        "plugin": "java",
+        "method": "deserializeWithClassLoader",
+        "framework": "Java",
+        "dependencies": [
+          "javax.servlet",
+          "java.sql",
+          "java.io"
+        ]
+      },
+      "remediation": "Implement validation, use a whitelist of classes, or avoid deserialization of untrusted data.",
+      "references": [],
+      "plugin": "java",
+      "timestamp": "2025-07-10T02:10:35.204Z",
+      "relativePath": "src/main/java/com/example/InsecureDeserialization.java",
+      "discoveredBy": "analyzer-3-1752113431804",
+      "discoveredAt": "2025-07-10T02:10:45.128Z",
+      "risk": 90,
+      "validation": {
+        "contextCheck": {
+          "isTestCode": false,
+          "isGeneratedCode": false,
+          "isDeadCode": false,
+          "hasProperContext": true,
+          "score": 0.7
+        },
+        "patternCheck": {
+          "matchesKnownPatterns": false,
+          "matchedPatterns": 0,
+          "isFalsePositive": false,
+          "score": 0.5
+        },
+        "semanticCheck": {
+          "hasSemanticContext": true,
+          "hasInputValidation": false,
+          "hasOutputEncoding": false,
+          "hasSecurityControls": false,
+          "score": 1
+        },
+        "riskAssessment": {
+          "exploitability": 0.5,
+          "impact": 1,
+          "likelihood": 0.5,
+          "riskScore": 0.6666666666666666,
+          "riskLevel": "HIGH"
+        },
+        "llmValidation": {
+          "isValid": true,
+          "confidence": 0.9,
+          "reasoning": "The code directly deserializes data from an untrusted source without any validation, filtering, or restrictions. The method uses ObjectInputStream to read an object from the byte array, which is a well-known vector for deserialization vulnerabilities, especially if the input data can be controlled by an attacker. There are no security controls, such as whitelisting classes or using a safe deserialization framework, in place. Given the context and the evidence, this pattern is a classic insecure deserialization vulnerability.",
+          "riskLevel": "CRITICAL",
+          "exploitability": 0.8,
+          "impact": 0.9,
+          "recommendations": [
+            "Implement input validation and restrict deserialization to known safe classes.",
+            "Use a serialization framework that supports whitelisting or safe deserialization.",
+            "Apply security patches or updates that mitigate deserialization risks.",
+            "Consider alternative data formats such as JSON or XML with proper validation."
+          ],
+          "validatedAt": "2025-07-10T02:10:49.845Z",
+          "validatedBy": "llm-openai-gpt-4.1-nano",
+          "originalVulnerability": "vuln-ny0jjh"
+        },
+        "isValid": true,
+        "validatedAt": "2025-07-10T02:10:49.845Z",
+        "validatedBy": "validator-4-1752113445130"
+      }
+    },
+    {
+      "id": "vuln-uu7zlw",
+      "type": "SQL_INJECTION",
+      "severity": "CRITICAL",
+      "confidence": 0.753,
+      "file": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/SensitiveDataExposure.java",
+      "line": 4,
+      "description": "The code constructs an SQL query by directly concatenating user input without validation or parameterization, making it vulnerable to SQL injection.",
+      "evidence": "public void handleError(HttpServletRequest request, HttpServletResponse response) {\n        try {\n            String query = \"SELECT * FROM users WHERE id = \" + request.getParameter(\"id\");\n            \n        } catch (Exception e) {\n            PrintWriter out = response.getWriter();\n            out.println(\"Database error: \" + e.getMessage());\n            out.println(\"Stack trace: \" + e.getStackTrace());\n        }\n    \n}",
+      "cwe": 89,
+      "owasp": "A03:2021",
+      "context": {
+        "filePath": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/SensitiveDataExposure.java",
+        "relativePath": "src/main/java/com/example/SensitiveDataExposure.java",
+        "fileType": "source",
+        "language": "java",
+        "size": 1699,
+        "plugin": "java",
+        "method": "handleError",
+        "framework": "Java",
+        "dependencies": [
+          "javax.servlet",
+          "java.sql",
+          "java.io"
+        ]
+      },
+      "remediation": "Use prepared statements with parameterized queries to prevent SQL injection, e.g., PreparedStatement pstmt = connection.prepareStatement(\"SELECT * FROM users WHERE id = ?\"); pstmt.setString(1, request.getParameter(\"id\"));",
+      "references": [],
+      "plugin": "java",
+      "timestamp": "2025-07-10T02:10:42.360Z",
+      "relativePath": "src/main/java/com/example/SensitiveDataExposure.java",
+      "discoveredBy": "analyzer-3-1752113431804",
+      "discoveredAt": "2025-07-10T02:10:45.128Z",
+      "risk": 90,
+      "validation": {
+        "contextCheck": {
+          "isTestCode": false,
+          "isGeneratedCode": false,
+          "isDeadCode": false,
+          "hasProperContext": true,
+          "score": 0.7
+        },
+        "patternCheck": {
+          "matchesKnownPatterns": false,
+          "matchedPatterns": 0,
+          "isFalsePositive": false,
+          "score": 0.5
+        },
+        "semanticCheck": {
+          "hasSemanticContext": true,
+          "hasInputValidation": false,
+          "hasOutputEncoding": false,
+          "hasSecurityControls": false,
+          "score": 1
+        },
+        "riskAssessment": {
+          "exploitability": 0.9,
+          "impact": 1,
+          "likelihood": 0.5,
+          "riskScore": 0.7999999999999999,
+          "riskLevel": "HIGH"
+        },
+        "llmValidation": {
+          "isValid": true,
+          "confidence": 0.9,
+          "reasoning": "The code constructs an SQL query by directly concatenating user input (`request.getParameter(",
+          "riskLevel": "CRITICAL",
+          "exploitability": 0.8,
+          "impact": 0.9,
+          "recommendations": [
+            "Use prepared statements with parameterized queries to prevent SQL injection.",
+            "Validate and sanitize user inputs.",
+            "Implement ORM or query builders that handle parameterization.",
+            "Use Web Application Firewalls (WAFs) to detect and block injection attempts."
+          ],
+          "validatedAt": "2025-07-10T02:11:25.564Z",
+          "validatedBy": "llm-openai-gpt-4.1-nano",
+          "originalVulnerability": "vuln-uu7zlw"
+        },
+        "isValid": true,
+        "validatedAt": "2025-07-10T02:11:25.564Z",
+        "validatedBy": "validator-4-1752113445130"
+      }
+    },
+    {
+      "id": "vuln-1y5ofv",
+      "type": "INSECURE_DESERIALIZATION",
+      "severity": "CRITICAL",
+      "confidence": 0.7436666666666667,
+      "file": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/VulnerableComponents.java",
+      "line": 4,
+      "description": "Deserializing data from an untrusted source without validation or restrictions can lead to remote code execution or other security issues.",
+      "evidence": "public Object deserializeUploadedObject(String filename) {\n        FileInputStream fis = new FileInputStream(filename);\n        ObjectInputStream ois = new ObjectInputStream(fis);\n        return ois.readObject();\n    \n}",
+      "cwe": 502,
+      "owasp": "A08:2021",
+      "context": {
+        "filePath": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/VulnerableComponents.java",
+        "relativePath": "src/main/java/com/example/VulnerableComponents.java",
+        "fileType": "source",
+        "language": "java",
+        "size": 2085,
+        "plugin": "java",
+        "method": "deserializeUploadedObject",
+        "framework": "Java",
+        "dependencies": [
+          "javax.servlet",
+          "java.sql",
+          "java.io"
+        ]
+      },
+      "remediation": "Avoid deserializing data from untrusted sources. If necessary, implement a whitelist of allowed classes or use a safer serialization mechanism.",
+      "references": [],
+      "plugin": "java",
+      "timestamp": "2025-07-10T02:10:42.194Z",
+      "relativePath": "src/main/java/com/example/VulnerableComponents.java",
+      "discoveredBy": "analyzer-3-1752113431804",
+      "discoveredAt": "2025-07-10T02:10:45.129Z",
+      "risk": 90,
+      "validation": {
+        "contextCheck": {
+          "isTestCode": false,
+          "isGeneratedCode": false,
+          "isDeadCode": false,
+          "hasProperContext": true,
+          "score": 0.7
+        },
+        "patternCheck": {
+          "matchesKnownPatterns": false,
+          "matchedPatterns": 0,
+          "isFalsePositive": false,
+          "score": 0.5
+        },
+        "semanticCheck": {
+          "hasSemanticContext": true,
+          "hasInputValidation": false,
+          "hasOutputEncoding": false,
+          "hasSecurityControls": false,
+          "score": 1
+        },
+        "riskAssessment": {
+          "exploitability": 0.5,
+          "impact": 1,
+          "likelihood": 0.5,
+          "riskScore": 0.6666666666666666,
+          "riskLevel": "HIGH"
+        },
+        "llmValidation": {
+          "isValid": true,
+          "confidence": 0.9,
+          "reasoning": "The code directly deserializes data from a file without any validation, sanitization, or restrictions, which is a classic insecure deserialization pattern. The method reads an object from an untrusted source (a file specified by filename), and no safeguards are evident. Given the severity is marked as CRITICAL and the code snippet confirms untrusted input handling, this constitutes a legitimate vulnerability. The absence of validation or use of safe deserialization practices (like whitelisting classes) further supports this assessment.",
+          "riskLevel": "CRITICAL",
+          "exploitability": 0.8,
+          "impact": 0.9,
+          "recommendations": [
+            "Implement strict whitelisting of classes during deserialization.",
+            "Validate and sanitize input files before deserialization.",
+            "Use safer serialization formats (e.g., JSON, XML with validation).",
+            "Consider using serialization frameworks that do not execute code during deserialization.",
+            "Apply security controls such as sandboxing deserialization processes."
+          ],
+          "validatedAt": "2025-07-10T02:10:49.992Z",
+          "validatedBy": "llm-openai-gpt-4.1-nano",
+          "originalVulnerability": "vuln-1y5ofv"
+        },
+        "isValid": true,
+        "validatedAt": "2025-07-10T02:10:49.992Z",
+        "validatedBy": "validator-4-1752113445130"
+      }
+    },
+    {
+      "id": "vuln-xx50no",
+      "type": "XML_EXTERNAL_ENTITY",
+      "severity": "CRITICAL",
+      "confidence": 0.7436666666666667,
+      "file": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/VulnerableComponents.java",
+      "line": 6,
+      "description": "The code uses DocumentBuilder without disabling external entity processing, which can lead to XXE attacks.",
+      "evidence": "public void parseUploadedXml(String xmlFile) {\n        javax.xml.parsers.DocumentBuilderFactory factory = javax.xml.parsers.DocumentBuilderFactory.newInstance();\n        \n        javax.xml.parsers.DocumentBuilder builder = factory.newDocumentBuilder();\n        builder.parse(new java.io.File(xmlFile));\n    \n}",
+      "cwe": 611,
+      "owasp": "A05:2021",
+      "context": {
+        "filePath": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/VulnerableComponents.java",
+        "relativePath": "src/main/java/com/example/VulnerableComponents.java",
+        "fileType": "source",
+        "language": "java",
+        "size": 2085,
+        "plugin": "java",
+        "method": "parseUploadedXml",
+        "framework": "Java",
+        "dependencies": [
+          "javax.servlet",
+          "java.sql",
+          "java.io"
+        ]
+      },
+      "remediation": "Disable external entity processing by setting factory.setFeature(\"http://apache.org/xml/features/disallow-doctype-decl\", true); and factory.setFeature(\"http://xml.org/sax/features/external-general-entities\", false);",
+      "references": [],
+      "plugin": "java",
+      "timestamp": "2025-07-10T02:10:42.194Z",
+      "relativePath": "src/main/java/com/example/VulnerableComponents.java",
+      "discoveredBy": "analyzer-3-1752113431804",
+      "discoveredAt": "2025-07-10T02:10:45.129Z",
+      "risk": 90,
+      "validation": {
+        "contextCheck": {
+          "isTestCode": false,
+          "isGeneratedCode": false,
+          "isDeadCode": false,
+          "hasProperContext": true,
+          "score": 0.7
+        },
+        "patternCheck": {
+          "matchesKnownPatterns": false,
+          "matchedPatterns": 0,
+          "isFalsePositive": false,
+          "score": 0.5
+        },
+        "semanticCheck": {
+          "hasSemanticContext": true,
+          "hasInputValidation": false,
+          "hasOutputEncoding": false,
+          "hasSecurityControls": false,
+          "score": 1
+        },
+        "riskAssessment": {
+          "exploitability": 0.5,
+          "impact": 1,
+          "likelihood": 0.5,
+          "riskScore": 0.6666666666666666,
+          "riskLevel": "HIGH"
+        },
+        "llmValidation": {
+          "isValid": true,
+          "confidence": 0.9,
+          "reasoning": "The code creates a DocumentBuilder without explicitly disabling external entity processing, which by default is enabled in many Java XML parsers. This can allow XXE attacks if untrusted XML input is parsed. The code does not set features such as 'http://apache.org/xml/features/disallow-doctype-decl' or 'http://xml.org/sax/features/external-general-entities' to false, nor does it use a secure factory configuration. Given the evidence and typical default behaviors, this is a legitimate vulnerability. However, the high confidence is slightly tempered by the absence of explicit configuration details, but the default behavior in many Java environments makes this a real concern.",
+          "riskLevel": "CRITICAL",
+          "exploitability": 0.8,
+          "impact": 0.9,
+          "recommendations": [
+            "Disable external entity processing by setting factory features, e.g., factory.setFeature('http://xml.org/sax/features/external-general-entities', false);",
+            "Set 'disallow-doctype-decl' to true if supported.",
+            "Validate and sanitize XML input before parsing.",
+            "Use secure parser configurations by default."
+          ],
+          "validatedAt": "2025-07-10T02:11:27.357Z",
+          "validatedBy": "llm-openai-gpt-4.1-nano",
+          "originalVulnerability": "vuln-xx50no"
+        },
+        "isValid": true,
+        "validatedAt": "2025-07-10T02:11:27.357Z",
+        "validatedBy": "validator-4-1752113445130"
+      }
+    },
+    {
+      "id": "vuln-1ocspj",
+      "type": "XML_EXTERNAL_ENTITY",
+      "severity": "CRITICAL",
+      "confidence": 0.7436666666666667,
+      "file": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/XxeVulnerability.java",
+      "line": 4,
+      "description": "The code uses DocumentBuilderFactory without disabling external entity processing, which can lead to XXE attacks.",
+      "evidence": "public void parseXmlDocument(HttpServletRequest request) {\n        String xmlContent = request.getParameter(\"xml\");\n        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();\n        DocumentBuilder builder = factory.newDocumentBuilder();\n        builder.parse(new InputSource(new StringReader(xmlContent)));\n    \n}",
+      "cwe": 611,
+      "owasp": "A05:2021",
+      "context": {
+        "filePath": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/XxeVulnerability.java",
+        "relativePath": "src/main/java/com/example/XxeVulnerability.java",
+        "fileType": "source",
+        "language": "java",
+        "size": 1322,
+        "plugin": "java",
+        "method": "parseXmlDocument",
+        "framework": "Java",
+        "dependencies": [
+          "javax.servlet",
+          "java.sql",
+          "java.io"
+        ]
+      },
+      "remediation": "Disable external entity processing by setting factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true) and factory.setFeature(\"http://apache.org/xml/features/disallow-doctype-decl\", true).",
+      "references": [],
+      "plugin": "java",
+      "timestamp": "2025-07-10T02:10:45.126Z",
+      "relativePath": "src/main/java/com/example/XxeVulnerability.java",
+      "discoveredBy": "analyzer-3-1752113431804",
+      "discoveredAt": "2025-07-10T02:10:45.129Z",
+      "risk": 90,
+      "validation": {
+        "contextCheck": {
+          "isTestCode": false,
+          "isGeneratedCode": false,
+          "isDeadCode": false,
+          "hasProperContext": true,
+          "score": 0.7
+        },
+        "patternCheck": {
+          "matchesKnownPatterns": false,
+          "matchedPatterns": 0,
+          "isFalsePositive": false,
+          "score": 0.5
+        },
+        "semanticCheck": {
+          "hasSemanticContext": true,
+          "hasInputValidation": false,
+          "hasOutputEncoding": false,
+          "hasSecurityControls": false,
+          "score": 1
+        },
+        "riskAssessment": {
+          "exploitability": 0.5,
+          "impact": 1,
+          "likelihood": 0.5,
+          "riskScore": 0.6666666666666666,
+          "riskLevel": "HIGH"
+        },
+        "llmValidation": {
+          "isValid": false,
+          "confidence": 0.9,
+          "reasoning": "The code creates a DocumentBuilderFactory and a DocumentBuilder but does not explicitly disable external entity processing. However, by default, many Java implementations disable external entities for security reasons, especially in recent Java versions. Without explicit configuration, the vulnerability depends on the runtime environment. Since the report claims the code does not disable external entities, and the code snippet indeed lacks such configuration, it is potentially vulnerable. Nonetheless, the default behavior may mitigate this risk, making it a borderline case. Given the lack of explicit disabling, this should be considered a false positive if the environment defaults to secure settings. To confirm, explicit disabling of external entities should be implemented. Therefore, this is likely a false positive based on the provided code snippet and typical default security measures.",
+          "riskLevel": "LOW",
+          "exploitability": 0.3,
+          "impact": 0.7,
+          "recommendations": [
+            "Explicitly disable external entity processing by setting factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true)",
+            "Set factory.setFeature(\"http://apache.org/xml/features/disallow-doctype-decl\", true)",
+            "Test the environment to confirm default security settings"
+          ],
+          "validatedAt": "2025-07-10T02:11:27.945Z",
+          "validatedBy": "llm-openai-gpt-4.1-nano",
+          "originalVulnerability": "vuln-1ocspj"
+        },
+        "isValid": true,
+        "validatedAt": "2025-07-10T02:11:27.945Z",
+        "validatedBy": "validator-4-1752113445130"
+      }
+    },
+    {
+      "id": "vuln-mu4b7r",
+      "type": "SECURITY_MISCONFIGURATION",
+      "severity": "CRITICAL",
+      "confidence": 0.6996666666666667,
+      "file": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/SecurityMisconfiguration.java",
+      "line": 14,
+      "description": "The code disables SSL certificate revocation checks and allows unsafe SSL renegotiation, which can expose the application to man-in-the-middle attacks.",
+      "evidence": "System.setProperty(\"com.sun.net.ssl.checkRevocation\", \"false\"); System.setProperty(\"sun.security.ssl.allowUnsafeRenegotiation\", \"true\");",
+      "cwe": 16,
+      "owasp": "A05:2021",
+      "context": {
+        "filePath": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/SecurityMisconfiguration.java",
+        "relativePath": "src/main/java/com/example/SecurityMisconfiguration.java",
+        "fileType": "config",
+        "language": "java",
+        "size": 1735,
+        "plugin": "java",
+        "analysisType": "full-file",
+        "framework": "Java Servlet",
+        "dependencies": [
+          "javax.servlet",
+          "java.sql",
+          "java.io"
+        ]
+      },
+      "remediation": "Remove these system property overrides to enforce proper SSL security checks.",
+      "references": [],
+      "plugin": "java",
+      "timestamp": "2025-07-10T02:10:40.074Z",
+      "relativePath": "src/main/java/com/example/SecurityMisconfiguration.java",
+      "discoveredBy": "analyzer-3-1752113431804",
+      "discoveredAt": "2025-07-10T02:10:45.128Z",
+      "risk": 80,
+      "validation": {
+        "contextCheck": {
+          "isTestCode": false,
+          "isGeneratedCode": false,
+          "isDeadCode": false,
+          "hasProperContext": true,
+          "score": 0.7
+        },
+        "patternCheck": {
+          "matchesKnownPatterns": false,
+          "matchedPatterns": 0,
+          "isFalsePositive": false,
+          "score": 0.5
+        },
+        "semanticCheck": {
+          "hasSemanticContext": false,
+          "hasInputValidation": false,
+          "hasOutputEncoding": false,
+          "hasSecurityControls": true,
+          "score": 0.8999999999999999
+        },
+        "riskAssessment": {
+          "exploitability": 0.5,
+          "impact": 1,
+          "likelihood": 0.5,
+          "riskScore": 0.6666666666666666,
+          "riskLevel": "HIGH"
+        },
+        "llmValidation": {
+          "isValid": true,
+          "confidence": 0.9,
+          "reasoning": "The code explicitly disables SSL certificate revocation checks and permits unsafe SSL renegotiation by setting system properties. These configurations weaken SSL/TLS security, making the application vulnerable to man-in-the-middle attacks. Since these settings are known to compromise security and are set directly in the code, this constitutes a legitimate security misconfiguration. The high severity and the nature of the settings support this assessment.",
+          "riskLevel": "CRITICAL",
+          "exploitability": 0.8,
+          "impact": 0.9,
+          "recommendations": [
+            "Remove or disable the code that sets 'com.sun.net.ssl.checkRevocation' to 'false' and 'sun.security.ssl.allowUnsafeRenegotiation' to 'true'.",
+            "Ensure SSL/TLS configurations enforce certificate revocation checks and disallow unsafe renegotiation.",
+            "Use secure default settings provided by the SSL/TLS libraries and frameworks.",
+            "Conduct a security review of SSL/TLS configurations in the application."
+          ],
+          "validatedAt": "2025-07-10T02:11:27.198Z",
+          "validatedBy": "llm-openai-gpt-4.1-nano",
+          "originalVulnerability": "vuln-mu4b7r"
+        },
+        "isValid": true,
+        "validatedAt": "2025-07-10T02:11:27.198Z",
+        "validatedBy": "validator-4-1752113445130"
+      }
+    },
+    {
+      "id": "vuln-3xg5n1",
+      "type": "PATH_TRAVERSAL",
+      "severity": "HIGH",
+      "confidence": 0.7436666666666667,
+      "file": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/LdapInjection.java",
+      "line": 4,
+      "description": "The code constructs an LDAP filter string directly from user input without validation or sanitization, which can lead to LDAP Injection (a form of Path Traversal in LDAP context).",
+      "evidence": "public void searchUser(HttpServletRequest request) {\n        String username = request.getParameter(\"username\");\n        String filter = \"(&(objectClass=person)(uid=\" + username + \"))\";\n        \n        Hashtable<String, String> env = new Hashtable<>();\n        env.put(Context.INITIAL_CONTEXT_FACTORY, \"com.sun.jndi.ldap.LdapCtxFactory\");\n        env.put(Context.PROVIDER_URL, \"ldap:\n        \n        DirContext ctx = new InitialDirContext(env);\n        ctx.search(\"ou=users,dc=example,dc=com\", filter, null);\n    \n}",
+      "cwe": 22,
+      "owasp": "A01:2021",
+      "context": {
+        "filePath": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/LdapInjection.java",
+        "relativePath": "src/main/java/com/example/LdapInjection.java",
+        "fileType": "source",
+        "language": "java",
+        "size": 2054,
+        "plugin": "java",
+        "method": "searchUser",
+        "framework": "Java",
+        "dependencies": [
+          "javax.servlet",
+          "java.sql",
+          "java.io"
+        ]
+      },
+      "remediation": "Validate and sanitize the 'username' parameter before including it in the LDAP filter, or use parameterized queries if supported.",
+      "references": [],
+      "plugin": "java",
+      "timestamp": "2025-07-10T02:10:34.971Z",
+      "relativePath": "src/main/java/com/example/LdapInjection.java",
+      "discoveredBy": "analyzer-3-1752113431804",
+      "discoveredAt": "2025-07-10T02:10:45.128Z",
+      "risk": 72,
+      "validation": {
+        "contextCheck": {
+          "isTestCode": false,
+          "isGeneratedCode": false,
+          "isDeadCode": false,
+          "hasProperContext": true,
+          "score": 0.7
+        },
+        "patternCheck": {
+          "matchesKnownPatterns": false,
+          "matchedPatterns": 0,
+          "isFalsePositive": false,
+          "score": 0.5
+        },
+        "semanticCheck": {
+          "hasSemanticContext": true,
+          "hasInputValidation": false,
+          "hasOutputEncoding": false,
+          "hasSecurityControls": false,
+          "score": 1
+        },
+        "riskAssessment": {
+          "exploitability": 0.7,
+          "impact": 0.8,
+          "likelihood": 0.5,
+          "riskScore": 0.6666666666666666,
+          "riskLevel": "HIGH"
+        },
+        "llmValidation": {
+          "isValid": true,
+          "confidence": 0.9,
+          "reasoning": "The code constructs an LDAP filter string directly from user input without any validation or sanitization, which can lead to LDAP injection. Since LDAP filters are sensitive to special characters, malicious input could manipulate the filter logic, potentially allowing unauthorized data access or modification. The code does not use parameterized queries or escaping functions, increasing the risk. Although some LDAP libraries provide escaping mechanisms, their absence here indicates a genuine vulnerability.",
+          "riskLevel": "HIGH",
+          "exploitability": 0.7,
+          "impact": 0.8,
+          "recommendations": [
+            "Implement input validation and sanitization for the 'username' parameter.",
+            "Use LDAP filter escaping functions to sanitize user input.",
+            "Consider using parameterized LDAP queries if supported by the library.",
+            "Add security controls such as input length restrictions and character whitelisting."
+          ],
+          "validatedAt": "2025-07-10T02:11:27.024Z",
+          "validatedBy": "llm-openai-gpt-4.1-nano",
+          "originalVulnerability": "vuln-3xg5n1"
+        },
+        "isValid": true,
+        "validatedAt": "2025-07-10T02:11:27.024Z",
+        "validatedBy": "validator-4-1752113445130"
+      }
+    },
+    {
+      "id": "vuln-txjwso",
+      "type": "PATH_TRAVERSAL",
+      "severity": "HIGH",
+      "confidence": 0.7436666666666667,
+      "file": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/LdapInjection.java",
+      "line": 3,
+      "description": "The code constructs an LDAP filter string by concatenating user input directly into the filter, which can lead to LDAP Injection if the input is malicious.",
+      "evidence": "public boolean authenticateUser(String username, String password) {\n        String filter = \"(&(objectClass=person)(uid=\" + username + \")(userPassword=\" + password + \"))\";\n        \n        Hashtable<String, String> env = new Hashtable<>();\n        env.put(Context.INITIAL_CONTEXT_FACTORY, \"com.sun.jndi.ldap.LdapCtxFactory\");\n        env.put(Context.PROVIDER_URL, \"ldap:\n        \n        DirContext ctx = new InitialDirContext(env);\n        return ctx.search(\"ou=users,dc=example,dc=com\", filter, null).hasMore();\n    \n}",
+      "cwe": 611,
+      "owasp": "A05:2021",
+      "context": {
+        "filePath": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/LdapInjection.java",
+        "relativePath": "src/main/java/com/example/LdapInjection.java",
+        "fileType": "source",
+        "language": "java",
+        "size": 2054,
+        "plugin": "java",
+        "method": "authenticateUser",
+        "framework": "Java",
+        "dependencies": [
+          "javax.servlet",
+          "java.sql",
+          "java.io"
+        ]
+      },
+      "remediation": "Use parameterized queries or escape user inputs properly before including them in LDAP filters.",
+      "references": [],
+      "plugin": "java",
+      "timestamp": "2025-07-10T02:10:34.971Z",
+      "relativePath": "src/main/java/com/example/LdapInjection.java",
+      "discoveredBy": "analyzer-3-1752113431804",
+      "discoveredAt": "2025-07-10T02:10:45.128Z",
+      "risk": 72,
+      "validation": {
+        "contextCheck": {
+          "isTestCode": false,
+          "isGeneratedCode": false,
+          "isDeadCode": false,
+          "hasProperContext": true,
+          "score": 0.7
+        },
+        "patternCheck": {
+          "matchesKnownPatterns": false,
+          "matchedPatterns": 0,
+          "isFalsePositive": false,
+          "score": 0.5
+        },
+        "semanticCheck": {
+          "hasSemanticContext": true,
+          "hasInputValidation": false,
+          "hasOutputEncoding": false,
+          "hasSecurityControls": false,
+          "score": 1
+        },
+        "riskAssessment": {
+          "exploitability": 0.7,
+          "impact": 0.8,
+          "likelihood": 0.5,
+          "riskScore": 0.6666666666666666,
+          "riskLevel": "HIGH"
+        },
+        "llmValidation": {
+          "isValid": false,
+          "confidence": 0.9,
+          "reasoning": "The code constructs an LDAP filter by directly concatenating user input into the filter string, which is a common pattern that can lead to LDAP injection vulnerabilities. However, the code does not perform any input validation or sanitization, and it does not use parameterized queries or LDAP-specific escaping functions. This suggests a potential security risk. Nonetheless, the code snippet does not show any LDAP injection mitigation mechanisms or context that confirms exploitation. Given the high severity and the pattern of direct concatenation, this is likely a legitimate vulnerability, but without evidence of actual injection or testing, it remains a potential rather than confirmed. The absence of input sanitization and the direct use of user input in LDAP filter strongly indicates a real risk.",
+          "riskLevel": "HIGH",
+          "exploitability": 0.7,
+          "impact": 0.8,
+          "recommendations": [
+            "Implement input validation and sanitization for 'username' and 'password' parameters.",
+            "Use LDAP query parameterization or escaping functions to prevent injection.",
+            "Consider using LDAP SDK features that support parameterized queries or escaping.",
+            "Conduct testing to confirm whether injection is possible in this context."
+          ],
+          "validatedAt": "2025-07-10T02:11:27.348Z",
+          "validatedBy": "llm-openai-gpt-4.1-nano",
+          "originalVulnerability": "vuln-txjwso"
+        },
+        "isValid": true,
+        "validatedAt": "2025-07-10T02:11:27.348Z",
+        "validatedBy": "validator-4-1752113445130"
+      }
+    },
+    {
+      "id": "vuln-t9a3pi",
+      "type": "SECURITY_MISCONFIGURATION",
+      "severity": "HIGH",
+      "confidence": 0.7390000000000001,
+      "file": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/SecurityMisconfiguration.java",
+      "line": 3,
+      "description": "The code uses MD5 for hashing passwords, which is insecure due to its vulnerability to collision attacks and fast computation, making it unsuitable for password hashing.",
+      "evidence": "public String hashPassword(String password) {\n        MessageDigest md = MessageDigest.getInstance(\"MD5\");\n        byte[] hash = md.digest(password.getBytes());\n        return new String(hash);\n    \n}",
+      "cwe": 16,
+      "owasp": "A05:2021",
+      "context": {
+        "filePath": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/SecurityMisconfiguration.java",
+        "relativePath": "src/main/java/com/example/SecurityMisconfiguration.java",
+        "fileType": "config",
+        "language": "java",
+        "size": 1735,
+        "plugin": "java",
+        "method": "hashPassword",
+        "framework": "Java",
+        "dependencies": [
+          "javax.servlet",
+          "java.sql",
+          "java.io"
+        ]
+      },
+      "remediation": "Use a strong password hashing algorithm like bcrypt, scrypt, or Argon2, provided by libraries such as Bouncy Castle or Spring Security.",
+      "references": [],
+      "plugin": "java",
+      "timestamp": "2025-07-10T02:10:40.074Z",
+      "relativePath": "src/main/java/com/example/SecurityMisconfiguration.java",
+      "discoveredBy": "analyzer-3-1752113431804",
+      "discoveredAt": "2025-07-10T02:10:45.128Z",
+      "risk": 72,
+      "validation": {
+        "contextCheck": {
+          "isTestCode": false,
+          "isGeneratedCode": false,
+          "isDeadCode": false,
+          "hasProperContext": true,
+          "score": 0.7
+        },
+        "patternCheck": {
+          "matchesKnownPatterns": false,
+          "matchedPatterns": 0,
+          "isFalsePositive": false,
+          "score": 0.5
+        },
+        "semanticCheck": {
+          "hasSemanticContext": true,
+          "hasInputValidation": false,
+          "hasOutputEncoding": false,
+          "hasSecurityControls": false,
+          "score": 1
+        },
+        "riskAssessment": {
+          "exploitability": 0.5,
+          "impact": 0.8,
+          "likelihood": 0.5,
+          "riskScore": 0.6,
+          "riskLevel": "HIGH"
+        },
+        "llmValidation": {
+          "isValid": true,
+          "confidence": 0.9,
+          "reasoning": "The code explicitly uses MD5 for hashing passwords, which is widely recognized as insecure for this purpose due to vulnerabilities to collision attacks and its fast computation speed, making it susceptible to brute-force attacks. The code does not show any additional security controls such as salting or key stretching (e.g., PBKDF2, bcrypt, scrypt), which are standard best practices for password hashing. The use of MD5 in this context is a clear security misconfiguration and constitutes a legitimate vulnerability. The only caveat is that the code snippet is minimal and does not show the entire context, but based on the provided evidence, the use of MD5 for password hashing is inherently insecure and should be replaced with a more secure algorithm.",
+          "riskLevel": "HIGH",
+          "exploitability": 0.7,
+          "impact": 0.8,
+          "recommendations": [
+            "Replace MD5 with a secure password hashing algorithm such as bcrypt, scrypt, or PBKDF2.",
+            "Implement salting and key stretching techniques to enhance password security.",
+            "Review the entire codebase for similar insecure hashing practices.",
+            "Ensure security best practices are followed for password storage."
+          ],
+          "validatedAt": "2025-07-10T02:11:29.843Z",
+          "validatedBy": "llm-openai-gpt-4.1-nano",
+          "originalVulnerability": "vuln-t9a3pi"
+        },
+        "isValid": true,
+        "validatedAt": "2025-07-10T02:11:29.843Z",
+        "validatedBy": "validator-4-1752113445130"
+      }
+    },
+    {
+      "id": "vuln-7eseiz",
+      "type": "SECURITY_MISCONFIGURATION",
+      "severity": "HIGH",
+      "confidence": 0.7390000000000001,
+      "file": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/SecurityMisconfiguration.java",
+      "line": 6,
+      "description": "The code creates a session cookie with HttpOnly set to false and Secure set to false, which can lead to session hijacking and cross-site scripting attacks.",
+      "evidence": "public void createSession(HttpServletRequest request, HttpServletResponse response) {\n        HttpSession session = request.getSession();\n        session.setAttribute(\"authenticated\", true);\n        \n        javax.servlet.http.Cookie cookie = new javax.servlet.http.Cookie(\"sessionId\", session.getId());\n        cookie.setHttpOnly(false);\n        cookie.setSecure(false);\n        response.addCookie(cookie);\n    \n}",
+      "cwe": 16,
+      "owasp": "A05:2021",
+      "context": {
+        "filePath": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/SecurityMisconfiguration.java",
+        "relativePath": "src/main/java/com/example/SecurityMisconfiguration.java",
+        "fileType": "config",
+        "language": "java",
+        "size": 1735,
+        "plugin": "java",
+        "method": "createSession",
+        "framework": "Java Servlet",
+        "dependencies": [
+          "javax.servlet",
+          "java.sql",
+          "java.io"
+        ]
+      },
+      "remediation": "Set cookie.setHttpOnly(true); and cookie.setSecure(true); to ensure cookies are protected against XSS and are only sent over HTTPS.",
+      "references": [],
+      "plugin": "java",
+      "timestamp": "2025-07-10T02:10:40.074Z",
+      "relativePath": "src/main/java/com/example/SecurityMisconfiguration.java",
+      "discoveredBy": "analyzer-3-1752113431804",
+      "discoveredAt": "2025-07-10T02:10:45.128Z",
+      "risk": 72,
+      "validation": {
+        "contextCheck": {
+          "isTestCode": false,
+          "isGeneratedCode": false,
+          "isDeadCode": false,
+          "hasProperContext": true,
+          "score": 0.7
+        },
+        "patternCheck": {
+          "matchesKnownPatterns": false,
+          "matchedPatterns": 0,
+          "isFalsePositive": false,
+          "score": 0.5
+        },
+        "semanticCheck": {
+          "hasSemanticContext": true,
+          "hasInputValidation": false,
+          "hasOutputEncoding": false,
+          "hasSecurityControls": false,
+          "score": 1
+        },
+        "riskAssessment": {
+          "exploitability": 0.5,
+          "impact": 0.8,
+          "likelihood": 0.5,
+          "riskScore": 0.6,
+          "riskLevel": "HIGH"
+        },
+        "llmValidation": {
+          "isValid": true,
+          "confidence": 0.9,
+          "reasoning": "The code explicitly creates a session cookie with HttpOnly and Secure flags set to false. This configuration allows client-side scripts to access the cookie and transmits it over non-HTTPS connections, increasing the risk of session hijacking and cross-site scripting (XSS) attacks. Since the code does not enforce these security flags, it constitutes a misconfiguration that can be exploited, validating the vulnerability report.",
+          "riskLevel": "HIGH",
+          "exploitability": 0.8,
+          "impact": 0.7,
+          "recommendations": [
+            "Set cookie.setHttpOnly(true) to prevent client-side script access.",
+            "Set cookie.setSecure(true) to ensure cookies are only transmitted over HTTPS.",
+            "Review and enforce security policies for session cookies in the application configuration.",
+            "Implement additional security measures such as Content Security Policy (CSP) and proper input validation."
+          ],
+          "validatedAt": "2025-07-10T02:11:29.482Z",
+          "validatedBy": "llm-openai-gpt-4.1-nano",
+          "originalVulnerability": "vuln-7eseiz"
+        },
+        "isValid": true,
+        "validatedAt": "2025-07-10T02:11:29.482Z",
+        "validatedBy": "validator-4-1752113445130"
+      }
+    },
+    {
+      "id": "vuln-c7tnpq",
+      "type": "INSECURE_HASHING_ALGORITHM",
+      "severity": "HIGH",
+      "confidence": 0.7389999999999999,
+      "file": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/SecurityMisconfiguration.java",
+      "line": 8,
+      "description": "The code uses MD5 for hashing passwords, which is considered insecure due to its vulnerability to collision attacks.",
+      "evidence": "MessageDigest md = MessageDigest.getInstance(\"MD5\");",
+      "cwe": 327,
+      "owasp": "A06:2021",
+      "context": {
+        "filePath": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/SecurityMisconfiguration.java",
+        "relativePath": "src/main/java/com/example/SecurityMisconfiguration.java",
+        "fileType": "config",
+        "language": "java",
+        "size": 1735,
+        "plugin": "java",
+        "analysisType": "full-file",
+        "framework": "Java Servlet",
+        "dependencies": [
+          "javax.servlet",
+          "java.sql",
+          "java.io"
+        ]
+      },
+      "remediation": "Use a stronger hashing algorithm like bcrypt, scrypt, or PBKDF2 with a salt.",
+      "references": [],
+      "plugin": "java",
+      "timestamp": "2025-07-10T02:10:40.074Z",
+      "relativePath": "src/main/java/com/example/SecurityMisconfiguration.java",
+      "discoveredBy": "analyzer-3-1752113431804",
+      "discoveredAt": "2025-07-10T02:10:45.128Z",
+      "risk": 72,
+      "validation": {
+        "contextCheck": {
+          "isTestCode": false,
+          "isGeneratedCode": false,
+          "isDeadCode": false,
+          "hasProperContext": true,
+          "score": 0.7
+        },
+        "patternCheck": {
+          "matchesKnownPatterns": false,
+          "matchedPatterns": 0,
+          "isFalsePositive": false,
+          "score": 0.5
+        },
+        "semanticCheck": {
+          "hasSemanticContext": false,
+          "hasInputValidation": false,
+          "hasOutputEncoding": false,
+          "hasSecurityControls": false,
+          "score": 0.9999999999999999
+        },
+        "riskAssessment": {
+          "exploitability": 0.5,
+          "impact": 0.8,
+          "likelihood": 0.5,
+          "riskScore": 0.6,
+          "riskLevel": "HIGH"
+        },
+        "llmValidation": {
+          "isValid": true,
+          "confidence": 0.9,
+          "reasoning": "The code explicitly uses MD5 for hashing passwords, which is widely recognized as insecure due to its vulnerability to collision attacks and fast computation, making it unsuitable for password hashing. The context shows direct use of MD5 without any additional security measures like salting or key stretching, indicating a genuine security flaw. Although the specific method and surrounding code are not provided, the use of MD5 for password hashing is a well-known security anti-pattern. Framework protections or mitigations are unlikely to compensate for this fundamental weakness, confirming the vulnerability's legitimacy.",
+          "riskLevel": "HIGH",
+          "exploitability": 0.7,
+          "impact": 0.8,
+          "recommendations": [
+            "Replace MD5 with a secure password hashing algorithm such as bcrypt, scrypt, or Argon2.",
+            "Implement salting and key stretching techniques if using general hashing functions.",
+            "Review and update security policies to prohibit the use of insecure hashing algorithms for passwords.",
+            "Conduct code reviews to ensure future cryptographic functions adhere to current security standards."
+          ],
+          "validatedAt": "2025-07-10T02:11:30.107Z",
+          "validatedBy": "llm-openai-gpt-4.1-nano",
+          "originalVulnerability": "vuln-c7tnpq"
+        },
+        "isValid": true,
+        "validatedAt": "2025-07-10T02:11:30.107Z",
+        "validatedBy": "validator-4-1752113445130"
+      }
+    },
+    {
+      "id": "vuln-m7xgxg",
+      "type": "INSECURE_ENCRYPTION_ALGORITHM",
+      "severity": "HIGH",
+      "confidence": 0.7389999999999999,
+      "file": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/SecurityMisconfiguration.java",
+      "line": 16,
+      "description": "The code uses DES encryption, which is considered insecure due to its small key size and vulnerabilities.",
+      "evidence": "Cipher cipher = javax.crypto.Cipher.getInstance(\"DES\");",
+      "cwe": 327,
+      "owasp": "A06:2021",
+      "context": {
+        "filePath": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/SecurityMisconfiguration.java",
+        "relativePath": "src/main/java/com/example/SecurityMisconfiguration.java",
+        "fileType": "config",
+        "language": "java",
+        "size": 1735,
+        "plugin": "java",
+        "analysisType": "full-file",
+        "framework": "Java Servlet",
+        "dependencies": [
+          "javax.servlet",
+          "java.sql",
+          "java.io"
+        ]
+      },
+      "remediation": "Use AES with a secure mode like GCM or CBC with proper padding.",
+      "references": [],
+      "plugin": "java",
+      "timestamp": "2025-07-10T02:10:40.074Z",
+      "relativePath": "src/main/java/com/example/SecurityMisconfiguration.java",
+      "discoveredBy": "analyzer-3-1752113431804",
+      "discoveredAt": "2025-07-10T02:10:45.128Z",
+      "risk": 72,
+      "validation": {
+        "contextCheck": {
+          "isTestCode": false,
+          "isGeneratedCode": false,
+          "isDeadCode": false,
+          "hasProperContext": true,
+          "score": 0.7
+        },
+        "patternCheck": {
+          "matchesKnownPatterns": false,
+          "matchedPatterns": 0,
+          "isFalsePositive": false,
+          "score": 0.5
+        },
+        "semanticCheck": {
+          "hasSemanticContext": false,
+          "hasInputValidation": false,
+          "hasOutputEncoding": false,
+          "hasSecurityControls": false,
+          "score": 0.9999999999999999
+        },
+        "riskAssessment": {
+          "exploitability": 0.5,
+          "impact": 0.8,
+          "likelihood": 0.5,
+          "riskScore": 0.6,
+          "riskLevel": "HIGH"
+        },
+        "llmValidation": {
+          "isValid": true,
+          "confidence": 0.9,
+          "reasoning": "The code explicitly uses the 'DES' algorithm for encryption, which is widely recognized as insecure due to its small key size (56 bits) and susceptibility to brute-force attacks. There are no indications of additional security controls or mitigations in the provided context. Given the high severity and the well-known vulnerabilities associated with DES, this constitutes a legitimate security concern. The code does not show any fallback or upgrade to more secure algorithms like AES, nor does it indicate the use of any cryptographic libraries that enforce stronger defaults. Therefore, this is a valid vulnerability report.",
+          "riskLevel": "HIGH",
+          "exploitability": 0.7,
+          "impact": 0.8,
+          "recommendations": [
+            "Replace DES with a more secure encryption algorithm such as AES (e.g., 'AES/CBC/PKCS5Padding')",
+            "Ensure proper key management and secure key storage",
+            "Review cryptographic practices and update to current security standards"
+          ],
+          "validatedAt": "2025-07-10T02:11:29.696Z",
+          "validatedBy": "llm-openai-gpt-4.1-nano",
+          "originalVulnerability": "vuln-m7xgxg"
+        },
+        "isValid": true,
+        "validatedAt": "2025-07-10T02:11:29.696Z",
+        "validatedBy": "validator-4-1752113445130"
+      }
+    },
+    {
+      "id": "vuln-ihw82i",
+      "type": "PATH_TRAVERSAL",
+      "severity": "HIGH",
+      "confidence": 0.7436666666666667,
+      "file": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/SsrfVulnerability.java",
+      "line": 4,
+      "description": "The code directly uses a URL parameter without validation, which could lead to Server-Side Request Forgery (SSRF) or path traversal if the URL points to internal resources.",
+      "evidence": "public String fetchUrl(HttpServletRequest request) {\n        String targetUrl = request.getParameter(\"url\");\n        URL url = new URL(targetUrl);\n        URLConnection connection = url.openConnection();\n        \n        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));\n        StringBuilder response = new StringBuilder();\n        String line;\n        while ((line = reader.readLine()) != null) {\n            response.append(line);\n        }\n        return response.toString();\n    \n}",
+      "cwe": 22,
+      "owasp": "A01:2021",
+      "context": {
+        "filePath": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/SsrfVulnerability.java",
+        "relativePath": "src/main/java/com/example/SsrfVulnerability.java",
+        "fileType": "source",
+        "language": "java",
+        "size": 2141,
+        "plugin": "java",
+        "method": "fetchUrl",
+        "framework": "Java",
+        "dependencies": [
+          "javax.servlet",
+          "java.sql",
+          "java.io"
+        ]
+      },
+      "remediation": "Validate and sanitize the 'url' parameter before using it to prevent SSRF and path traversal.",
+      "references": [],
+      "plugin": "java",
+      "timestamp": "2025-07-10T02:10:43.379Z",
+      "relativePath": "src/main/java/com/example/SsrfVulnerability.java",
+      "discoveredBy": "analyzer-3-1752113431804",
+      "discoveredAt": "2025-07-10T02:10:45.128Z",
+      "risk": 72,
+      "validation": {
+        "contextCheck": {
+          "isTestCode": false,
+          "isGeneratedCode": false,
+          "isDeadCode": false,
+          "hasProperContext": true,
+          "score": 0.7
+        },
+        "patternCheck": {
+          "matchesKnownPatterns": false,
+          "matchedPatterns": 0,
+          "isFalsePositive": false,
+          "score": 0.5
+        },
+        "semanticCheck": {
+          "hasSemanticContext": true,
+          "hasInputValidation": false,
+          "hasOutputEncoding": false,
+          "hasSecurityControls": false,
+          "score": 1
+        },
+        "riskAssessment": {
+          "exploitability": 0.7,
+          "impact": 0.8,
+          "likelihood": 0.5,
+          "riskScore": 0.6666666666666666,
+          "riskLevel": "HIGH"
+        },
+        "llmValidation": {
+          "isValid": true,
+          "confidence": 0.9,
+          "reasoning": "The code directly uses a URL parameter without any validation or sanitization, which can lead to SSRF or path traversal vulnerabilities. There are no input validation, whitelist checks, or security controls in place to restrict or verify the target URL. The method simply constructs a URL object from user input and opens a connection, which is a common pattern exploited in SSRF attacks. Although some frameworks or environments may have protections, based on the provided code snippet and context, this appears to be a legitimate vulnerability.",
+          "riskLevel": "HIGH",
+          "exploitability": 0.8,
+          "impact": 0.7,
+          "recommendations": [
+            "Implement input validation and sanitization for the 'url' parameter.",
+            "Use a whitelist of allowed domains or IP addresses.",
+            "Implement server-side request filtering or proxying.",
+            "Add logging and monitoring for outbound requests.",
+            "Consider using security libraries or frameworks that prevent SSRF."
+          ],
+          "validatedAt": "2025-07-10T02:11:30.248Z",
+          "validatedBy": "llm-openai-gpt-4.1-nano",
+          "originalVulnerability": "vuln-ihw82i"
+        },
+        "isValid": true,
+        "validatedAt": "2025-07-10T02:11:30.248Z",
+        "validatedBy": "validator-4-1752113445130"
+      }
+    },
+    {
+      "id": "vuln-2t67jr",
+      "type": "XSS",
+      "severity": "HIGH",
+      "confidence": 0.7460000000000001,
+      "file": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/VulnerableExample.java",
+      "line": 4,
+      "description": "The code directly outputs user input to the response without sanitization, leading to potential Cross-Site Scripting (XSS) vulnerability.",
+      "evidence": "public void xssVulnerable(HttpServletRequest request, HttpServletResponse response) {\n        String userInput = request.getParameter(\"input\");\n        response.getWriter().print(\"Hello \" + userInput);\n    \n}",
+      "cwe": 79,
+      "owasp": "A03:2021",
+      "context": {
+        "filePath": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/VulnerableExample.java",
+        "relativePath": "src/main/java/com/example/VulnerableExample.java",
+        "fileType": "source",
+        "language": "java",
+        "size": 1055,
+        "plugin": "java",
+        "method": "xssVulnerable",
+        "framework": "Java",
+        "dependencies": [
+          "javax.servlet",
+          "java.sql",
+          "java.io"
+        ]
+      },
+      "remediation": "Sanitize or encode user input before output, e.g., using OWASP Java Encoder library or similar.",
+      "references": [],
+      "plugin": "java",
+      "timestamp": "2025-07-10T02:10:44.755Z",
+      "relativePath": "src/main/java/com/example/VulnerableExample.java",
+      "discoveredBy": "analyzer-3-1752113431804",
+      "discoveredAt": "2025-07-10T02:10:45.129Z",
+      "risk": 72,
+      "validation": {
+        "contextCheck": {
+          "isTestCode": false,
+          "isGeneratedCode": false,
+          "isDeadCode": false,
+          "hasProperContext": true,
+          "score": 0.7
+        },
+        "patternCheck": {
+          "matchesKnownPatterns": false,
+          "matchedPatterns": 0,
+          "isFalsePositive": false,
+          "score": 0.5
+        },
+        "semanticCheck": {
+          "hasSemanticContext": true,
+          "hasInputValidation": false,
+          "hasOutputEncoding": false,
+          "hasSecurityControls": true,
+          "score": 1
+        },
+        "riskAssessment": {
+          "exploitability": 0.8,
+          "impact": 0.8,
+          "likelihood": 0.5,
+          "riskScore": 0.7000000000000001,
+          "riskLevel": "HIGH"
+        },
+        "llmValidation": {
+          "isValid": true,
+          "confidence": 0.9,
+          "reasoning": "The code directly outputs user input to the response without any sanitization or encoding, which is a classic pattern for reflected XSS vulnerabilities. The method retrieves a parameter 'input' from the request and writes it directly to the response, making it susceptible if an attacker supplies malicious scripts. The code does not show any sanitization, encoding, or security controls that mitigate this risk. Given the context and the evidence, this appears to be a legitimate XSS vulnerability.",
+          "riskLevel": "HIGH",
+          "exploitability": 0.8,
+          "impact": 0.7,
+          "recommendations": [
+            "Implement proper output encoding (e.g., HTML encoding) before writing user input to the response.",
+            "Validate and sanitize user input on the server side.",
+            "Use security frameworks or libraries that automatically encode output.",
+            "Implement Content Security Policy (CSP) headers to restrict inline scripts and sources."
+          ],
+          "validatedAt": "2025-07-10T02:11:31.823Z",
+          "validatedBy": "llm-openai-gpt-4.1-nano",
+          "originalVulnerability": "vuln-2t67jr"
+        },
+        "isValid": true,
+        "validatedAt": "2025-07-10T02:11:31.823Z",
+        "validatedBy": "validator-4-1752113445130"
+      }
+    },
+    {
+      "id": "vuln-gqh8mm",
+      "type": "PATH_TRAVERSAL",
+      "severity": "HIGH",
+      "confidence": 0.7436666666666667,
+      "file": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/VulnerableExample.java",
+      "line": 4,
+      "description": "The code concatenates user input directly into a file path without validation, leading to potential directory traversal attacks.",
+      "evidence": "public void pathTraversalVulnerable(HttpServletRequest request) {\n        String fileName = request.getParameter(\"file\");\n        File file = new File(\"/uploads/\" + fileName);\n        \n    \n}",
+      "cwe": 22,
+      "owasp": "A01:2021",
+      "context": {
+        "filePath": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/VulnerableExample.java",
+        "relativePath": "src/main/java/com/example/VulnerableExample.java",
+        "fileType": "source",
+        "language": "java",
+        "size": 1055,
+        "plugin": "java",
+        "method": "pathTraversalVulnerable",
+        "framework": "Java",
+        "dependencies": [
+          "javax.servlet",
+          "java.sql",
+          "java.io"
+        ]
+      },
+      "remediation": "Validate and sanitize the 'file' parameter to prevent directory traversal, or use a safe API to resolve the path.",
+      "references": [],
+      "plugin": "java",
+      "timestamp": "2025-07-10T02:10:44.755Z",
+      "relativePath": "src/main/java/com/example/VulnerableExample.java",
+      "discoveredBy": "analyzer-3-1752113431804",
+      "discoveredAt": "2025-07-10T02:10:45.129Z",
+      "risk": 72,
+      "validation": {
+        "contextCheck": {
+          "isTestCode": false,
+          "isGeneratedCode": false,
+          "isDeadCode": false,
+          "hasProperContext": true,
+          "score": 0.7
+        },
+        "patternCheck": {
+          "matchesKnownPatterns": false,
+          "matchedPatterns": 0,
+          "isFalsePositive": false,
+          "score": 0.5
+        },
+        "semanticCheck": {
+          "hasSemanticContext": true,
+          "hasInputValidation": false,
+          "hasOutputEncoding": false,
+          "hasSecurityControls": false,
+          "score": 1
+        },
+        "riskAssessment": {
+          "exploitability": 0.7,
+          "impact": 0.8,
+          "likelihood": 0.5,
+          "riskScore": 0.6666666666666666,
+          "riskLevel": "HIGH"
+        },
+        "llmValidation": {
+          "isValid": false,
+          "confidence": 0.9,
+          "reasoning": "The code directly concatenates user input into a file path without explicit validation, which appears to be a classic path traversal vulnerability. However, the code snippet does not show any input sanitization, validation, or use of security controls that mitigate such attacks. Given the context, this is a legitimate vulnerability. The high severity and the straightforward concatenation without validation strongly suggest a real issue. The absence of additional security measures or framework protections in the provided snippet confirms this. Therefore, this is a valid path traversal vulnerability.",
+          "riskLevel": "HIGH",
+          "exploitability": 0.8,
+          "impact": 0.7,
+          "recommendations": [
+            "Implement input validation to restrict file names to safe characters.",
+            "Use canonical paths and check that the resulting path is within the intended directory.",
+            "Employ security libraries or frameworks that handle path sanitization.",
+            "Consider using APIs that resolve canonical paths and verify directory boundaries."
+          ],
+          "validatedAt": "2025-07-10T02:11:32.031Z",
+          "validatedBy": "llm-openai-gpt-4.1-nano",
+          "originalVulnerability": "vuln-gqh8mm"
+        },
+        "isValid": true,
+        "validatedAt": "2025-07-10T02:11:32.031Z",
+        "validatedBy": "validator-4-1752113445130"
+      }
+    },
+    {
+      "id": "vuln-hq7xus",
+      "type": "BROKEN_COOKIE_SECURITY",
+      "severity": "HIGH",
+      "confidence": 0.7089999999999999,
+      "file": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/SecurityMisconfiguration.java",
+      "line": 11,
+      "description": "The session cookie is set with HttpOnly=false and Secure=false, making it vulnerable to theft via XSS and man-in-the-middle attacks.",
+      "evidence": "cookie.setHttpOnly(false); cookie.setSecure(false);",
+      "cwe": 284,
+      "owasp": "A01:2021",
+      "context": {
+        "filePath": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/SecurityMisconfiguration.java",
+        "relativePath": "src/main/java/com/example/SecurityMisconfiguration.java",
+        "fileType": "config",
+        "language": "java",
+        "size": 1735,
+        "plugin": "java",
+        "analysisType": "full-file",
+        "framework": "Java Servlet",
+        "dependencies": [
+          "javax.servlet",
+          "java.sql",
+          "java.io"
+        ]
+      },
+      "remediation": "Set HttpOnly=true and Secure=true on cookies to enhance security.",
+      "references": [],
+      "plugin": "java",
+      "timestamp": "2025-07-10T02:10:40.074Z",
+      "relativePath": "src/main/java/com/example/SecurityMisconfiguration.java",
+      "discoveredBy": "analyzer-3-1752113431804",
+      "discoveredAt": "2025-07-10T02:10:45.128Z",
+      "risk": 64,
+      "validation": {
+        "contextCheck": {
+          "isTestCode": false,
+          "isGeneratedCode": false,
+          "isDeadCode": false,
+          "hasProperContext": true,
+          "score": 0.7
+        },
+        "patternCheck": {
+          "matchesKnownPatterns": false,
+          "matchedPatterns": 0,
+          "isFalsePositive": false,
+          "score": 0.5
+        },
+        "semanticCheck": {
+          "hasSemanticContext": false,
+          "hasInputValidation": false,
+          "hasOutputEncoding": false,
+          "hasSecurityControls": false,
+          "score": 0.9999999999999999
+        },
+        "riskAssessment": {
+          "exploitability": 0.5,
+          "impact": 0.8,
+          "likelihood": 0.5,
+          "riskScore": 0.6,
+          "riskLevel": "HIGH"
+        },
+        "llmValidation": {
+          "isValid": true,
+          "confidence": 0.9,
+          "reasoning": "The code explicitly sets the cookie with HttpOnly=false and Secure=false, which are known security best practice violations. HttpOnly=false allows client-side scripts to access the cookie, increasing the risk of theft via XSS. Secure=false means the cookie is transmitted over unencrypted connections, exposing it to man-in-the-middle attacks. Since these settings are directly configured without apparent conditional logic or mitigations, this constitutes a legitimate security misconfiguration. The code context shows no additional safeguards or framework protections that would mitigate these issues.",
+          "riskLevel": "HIGH",
+          "exploitability": 0.8,
+          "impact": 0.9,
+          "recommendations": [
+            "Set HttpOnly=true to prevent client-side script access to the cookie.",
+            "Set Secure=true to ensure cookies are only transmitted over HTTPS.",
+            "Review the application's cookie handling policies and ensure security best practices are followed.",
+            "Implement Content Security Policy (CSP) and other XSS mitigations to reduce risk."
+          ],
+          "validatedAt": "2025-07-10T02:11:31.812Z",
+          "validatedBy": "llm-openai-gpt-4.1-nano",
+          "originalVulnerability": "vuln-hq7xus"
+        },
+        "isValid": true,
+        "validatedAt": "2025-07-10T02:11:31.812Z",
+        "validatedBy": "validator-4-1752113445130"
+      }
+    },
+    {
+      "id": "vuln-iqbig5",
+      "type": "INSECURE_RANDOM_USAGE",
+      "severity": "MEDIUM",
+      "confidence": 0.6743333333333333,
+      "file": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/SecurityMisconfiguration.java",
+      "line": 12,
+      "description": "The code uses java.util.Random for generating tokens, which is not cryptographically secure.",
+      "evidence": "java.util.Random random = new java.util.Random(); return String.valueOf(random.nextInt());",
+      "cwe": 330,
+      "owasp": "A06:2021",
+      "context": {
+        "filePath": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/SecurityMisconfiguration.java",
+        "relativePath": "src/main/java/com/example/SecurityMisconfiguration.java",
+        "fileType": "config",
+        "language": "java",
+        "size": 1735,
+        "plugin": "java",
+        "analysisType": "full-file",
+        "framework": "Java Servlet",
+        "dependencies": [
+          "javax.servlet",
+          "java.sql",
+          "java.io"
+        ]
+      },
+      "remediation": "Use SecureRandom instead of Random for generating cryptographically secure tokens.",
+      "references": [],
+      "plugin": "java",
+      "timestamp": "2025-07-10T02:10:40.074Z",
+      "relativePath": "src/main/java/com/example/SecurityMisconfiguration.java",
+      "discoveredBy": "analyzer-3-1752113431804",
+      "discoveredAt": "2025-07-10T02:10:45.128Z",
+      "risk": 42,
+      "validation": {
+        "contextCheck": {
+          "isTestCode": false,
+          "isGeneratedCode": false,
+          "isDeadCode": false,
+          "hasProperContext": true,
+          "score": 0.7
+        },
+        "patternCheck": {
+          "matchesKnownPatterns": false,
+          "matchedPatterns": 0,
+          "isFalsePositive": false,
+          "score": 0.5
+        },
+        "semanticCheck": {
+          "hasSemanticContext": false,
+          "hasInputValidation": false,
+          "hasOutputEncoding": false,
+          "hasSecurityControls": false,
+          "score": 0.9999999999999999
+        },
+        "riskAssessment": {
+          "exploitability": 0.5,
+          "impact": 0.6,
+          "likelihood": 0.5,
+          "riskScore": 0.5333333333333333,
+          "riskLevel": "MEDIUM"
+        },
+        "llmValidation": {
+          "isValid": true,
+          "confidence": 0.9,
+          "reasoning": "The code uses java.util.Random for token generation, which is not suitable for cryptographic purposes due to its predictability. The evidence shows direct usage of Random to generate a token, indicating a security weakness. Since the code explicitly uses Random for token creation, this aligns with the insecure random usage vulnerability. The only caveat is that the method name is unknown, but the code snippet clearly demonstrates insecure token generation.",
+          "riskLevel": "MEDIUM",
+          "exploitability": 0.6,
+          "impact": 0.4,
+          "recommendations": [
+            "Replace java.util.Random with java.security.SecureRandom for token generation.",
+            "Review all token generation code to ensure cryptographic security.",
+            "Implement proper input validation and sanitization where applicable.",
+            "Add security controls to monitor token predictability and usage."
+          ],
+          "validatedAt": "2025-07-10T02:11:31.832Z",
+          "validatedBy": "llm-openai-gpt-4.1-nano",
+          "originalVulnerability": "vuln-iqbig5"
+        },
+        "isValid": true,
+        "validatedAt": "2025-07-10T02:11:31.832Z",
+        "validatedBy": "validator-4-1752113445130"
+      }
+    },
+    {
+      "id": "vuln-pe8l8j",
+      "type": "SECURITY_MISCONFIGURATION",
+      "severity": "MEDIUM",
+      "confidence": 0.6443333333333334,
+      "file": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/SsrfVulnerability.java",
+      "line": 4,
+      "description": "The code does not enforce HTTPS, which could lead to man-in-the-middle attacks if the URL uses HTTP.",
+      "evidence": "public String fetchUrl(HttpServletRequest request) {\n        String targetUrl = request.getParameter(\"url\");\n        URL url = new URL(targetUrl);\n        URLConnection connection = url.openConnection();\n        \n        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));\n        StringBuilder response = new StringBuilder();\n        String line;\n        while ((line = reader.readLine()) != null) {\n            response.append(line);\n        }\n        return response.toString();\n    \n}",
+      "cwe": 16,
+      "owasp": "A05:2021",
+      "context": {
+        "filePath": "/Users/dnna/Projects/cybersecurity-thesis/test-java-project/src/main/java/com/example/SsrfVulnerability.java",
+        "relativePath": "src/main/java/com/example/SsrfVulnerability.java",
+        "fileType": "source",
+        "language": "java",
+        "size": 2141,
+        "plugin": "java",
+        "method": "fetchUrl",
+        "framework": "Java",
+        "dependencies": [
+          "javax.servlet",
+          "java.sql",
+          "java.io"
+        ]
+      },
+      "remediation": "Enforce HTTPS protocol in the URL or validate the scheme before making the connection.",
+      "references": [],
+      "plugin": "java",
+      "timestamp": "2025-07-10T02:10:43.379Z",
+      "relativePath": "src/main/java/com/example/SsrfVulnerability.java",
+      "discoveredBy": "analyzer-3-1752113431804",
+      "discoveredAt": "2025-07-10T02:10:45.128Z",
+      "risk": 36,
+      "validation": {
+        "contextCheck": {
+          "isTestCode": false,
+          "isGeneratedCode": false,
+          "isDeadCode": false,
+          "hasProperContext": true,
+          "score": 0.7
+        },
+        "patternCheck": {
+          "matchesKnownPatterns": false,
+          "matchedPatterns": 0,
+          "isFalsePositive": false,
+          "score": 0.5
+        },
+        "semanticCheck": {
+          "hasSemanticContext": true,
+          "hasInputValidation": false,
+          "hasOutputEncoding": false,
+          "hasSecurityControls": false,
+          "score": 1
+        },
+        "riskAssessment": {
+          "exploitability": 0.5,
+          "impact": 0.6,
+          "likelihood": 0.5,
+          "riskScore": 0.5333333333333333,
+          "riskLevel": "MEDIUM"
+        },
+        "llmValidation": {
+          "isValid": false,
+          "confidence": 0.8,
+          "reasoning": "The reported issue concerns the lack of HTTPS enforcement. However, the code snippet provided is a URL fetcher that takes a URL parameter and retrieves its content without any validation or enforcement of HTTPS. This is a security concern related to trusting user input and potential man-in-the-middle attacks if the URL is HTTP. Nonetheless, the code itself does not implement any security controls or configurations that enforce HTTPS; it merely fetches whatever URL is provided. The vulnerability report labels this as a security misconfiguration, but the code does not explicitly configure or enforce HTTPS; it simply uses the URL provided. Therefore, the core issue is more about input validation and trust rather than a misconfiguration of the environment or server settings. Given this, the vulnerability is more of a design concern than a direct security misconfiguration. It is a false positive in the context of environment configuration but highlights a security risk if untrusted URLs are fetched. Considering the severity is medium and the context, this is a false positive regarding a security misconfiguration.",
+          "riskLevel": "MEDIUM",
+          "exploitability": 0.6,
+          "impact": 0.4,
+          "recommendations": [
+            "Implement input validation to restrict URLs to HTTPS schemes.",
+            "Enforce HTTPS at the application or server configuration level.",
+            "Validate and sanitize user input to prevent malicious URLs.",
+            "Consider implementing a whitelist of allowed domains or URLs.",
+            "Use secure protocols and configurations for network connections."
+          ],
+          "validatedAt": "2025-07-10T02:11:32.299Z",
+          "validatedBy": "llm-openai-gpt-4.1-nano",
+          "originalVulnerability": "vuln-pe8l8j"
+        },
+        "isValid": true,
+        "validatedAt": "2025-07-10T02:11:32.300Z",
+        "validatedBy": "validator-4-1752113445130"
+      }
+    }
+  ],
+  "metrics": {},
+  "timestamp": "2025-07-10T02:10:31.788Z",
+  "duration": 60526
+}
+
+# Scan Summary:
+├── Languages detected: java 
+├── Vulnerabilities found: 25
+├── Severity breakdown:
+│   ├── Critical: 13
+│   ├── High: 10
+│   ├── Medium: 2
+│   └── Low: 0
+└── Scan completed in 1m 0s
+
+# Vulnerabilities detected! Review the results above.
